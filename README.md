@@ -7,7 +7,7 @@ Rockschool LMS theme
 
 ### Requirements
 
-`_s` requires the following dependencies:
+Requires the following dependencies:
 
 - [Node.js](https://nodejs.org/)
 - [Composer](https://getcomposer.org/)
