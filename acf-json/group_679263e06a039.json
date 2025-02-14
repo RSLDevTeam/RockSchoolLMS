@@ -1,0 +1,53 @@
+{
+    "key": "group_679263e06a039",
+    "title": "Soundslice",
+    "fields": [
+        {
+            "key": "field_679263e0b0d04",
+            "label": "Track ID",
+            "name": "track_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Add Soundslice track ID to embed the player on this lesson \/ topic. Please enter the ID only, not the full embed code, eg: for https:\/\/www.soundslice.com\/slices\/<b>XXXX<\/b>\/embed\/ just enter <b>XXXX<\/b>",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "sfwd-lessons"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "sfwd-topic"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1739361231
+}

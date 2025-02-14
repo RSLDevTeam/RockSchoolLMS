@@ -7,7 +7,7 @@
  * @package rslfranchise
  */
 
-get_header('learndash');
+get_header();
 ?>
 
 	<main id="primary" class="site-main">

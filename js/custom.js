@@ -1,66 +1,36 @@
+
 // Custom JS
 
 $ = jQuery;
 
 
-// Menu
+// Menus
 document.addEventListener('DOMContentLoaded', function () {
-    const burger = document.querySelector('.navigation__burger');
+
+    // Vertical menu expand on hover
     const verticalMenu = document.querySelector('.vertical-menu');
-    const mainContainer = document.querySelector('.main-container');
     const site = document.querySelector('.site');
-    const ldToggle = document.querySelector('.ld-content-sidebar-nav-toggle');
-    const ldSidebar = document.querySelector('.ld-content-sidebar');
 
-    
-    
+    if (verticalMenu && site) {
+        verticalMenu.addEventListener('mouseenter', function () {
+            verticalMenu.classList.remove('vertical-menu-clicked');
+            site.classList.remove('menu-clicked');
+        });
 
-    // Function to set a cookie
-    function setCookie(name, value, days) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
-    }
-
-    // Function to get a cookie
-    function getCookie(name) {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.startsWith(`${name}=`)) {
-                return cookie.substring(name.length + 1);
-            }
-        }
-        return null;
-    }
-
-    // Apply saved menu state on load
-    const menuState = getCookie('menu_state');
-    if (menuState === 'focus') {
-        verticalMenu.classList.add('vertical-menu-clicked');
-        site.classList.add('menu-clicked');
-    }
-
-    if (burger && verticalMenu) {
-        burger.addEventListener('click', function () {
-            verticalMenu.classList.toggle('vertical-menu-clicked');
-            site.classList.toggle('menu-clicked');
-
-            // Save the menu state in a cookie
-            if (verticalMenu.classList.contains('vertical-menu-clicked')) {
-                setCookie('menu_state', 'focus', 7); // Remember for 7 days
-            } else {
-                setCookie('menu_state', 'unfocus', 7); 
-            }
+        verticalMenu.addEventListener('mouseleave', function () {
+            verticalMenu.classList.add('vertical-menu-clicked');
+            site.classList.add('menu-clicked');
         });
     }
+
+    const ldToggle = document.querySelector('.ld-content-sidebar-nav-toggle');
+    const ldSidebar = document.querySelector('.ld-content-sidebar');
 
     if (ldToggle && ldSidebar) {
         ldToggle.addEventListener('click', function () {
             ldSidebar.classList.toggle('ld-sidebar-open');
         });
     }
-
 });
 
 // Soundslice embed shizzle

@@ -52,6 +52,8 @@ function rslfranchise_setup() {
 			'menu-1' => esc_html__( 'Primary', 'rslfranchise' ),
 			'menu-2' => esc_html__( 'Secondary', 'rslfranchise' ),
 			'menu-3' => esc_html__( 'Utility', 'rslfranchise' ),
+			'menu-4' => esc_html__( 'Instructor', 'rslfranchise' ),
+			'menu-5' => esc_html__( 'Learner', 'rslfranchise' ),
 		)
 	);
 
@@ -184,6 +186,21 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 }
 
 /**
+ * Custom user roles.
+ */
+require get_template_directory() . '/inc/user-roles.php';
+
+/**
  * Custom and misc functions.
  */
+require get_template_directory() . '/inc/learndash.php';
+
+/**
+ * LearnDash functions.
+ */
 require get_template_directory() . '/inc/dev.php';
+
+/**
+ * Snippet functions.
+ */
+require get_template_directory() . '/inc/snippets.php';

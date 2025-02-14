@@ -2,7 +2,11 @@
 
 /* Cursory CSS for the moment, all just lumped in toegther */
 
-.header-logo-m {
+.site-branding {
+    margin: 0em 2em 0.2em 0em;
+}
+
+img.header-logo-m {
     display: none;
 }
 
@@ -11,7 +15,7 @@
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    width: 20px;
+    width: 18px;
     height: 16px;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -29,7 +33,7 @@
     display: block;
     width: 100%;
     height: 2px;
-    background-color: #fff;
+    background-color: #323638;
     -webkit-transition: opacity .2s .2s, -webkit-transform .4s;
     transition: transform .4s, opacity .2s .2s, -webkit-transform .4s;
 }
@@ -48,12 +52,12 @@ section.sidebar-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.5em 1em;
+    padding: .7em 0;
 }
 
 
 
-h1 {
+h1, h2 {
     font-weight: 700;
 }
 
@@ -62,8 +66,20 @@ body {
 }
 
 header#masthead, footer#colophon {
-    background: #323638;
-    padding: 1.5em 1em;
+    background: #fff;
+    padding: 0.5em 1em;
+}
+
+header#masthead {
+    border-bottom: 1px solid #ececec;
+    height: 64px;
+    position: sticky !important;
+    top: 0;
+    z-index: 6;
+}
+
+.admin-bar header#masthead {
+    top: 32px;
 }
 
 ul.nav-menu a, footer#colophon a, footer#colophon {
@@ -75,8 +91,18 @@ h1 {
 }
 
 main {
-    background: #f9f9f9;
     min-height: 50vh;
+}
+
+.page main,
+.single-sfwd-courses main {
+    display: block;
+    margin: auto;
+    max-width: 1350px;
+}
+
+.main-container {
+    background: #fafafa;
 }
 
 /*header.entry-header {
@@ -150,7 +176,7 @@ span.edit-link {
 }
 
 img.header-logo {
-    width: 120px;
+    width: 225px;
 }
 
 ul#primary-menu {
@@ -161,12 +187,13 @@ ul#primary-menu {
 header#masthead {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .vertical-menu {
-    width: 230px;
+    width: 193px;
     max-width: 25%;
-    background: #181818;
+    background: #ececec;
     position: fixed;
     height: 100vh;
     display: flex;
@@ -175,11 +202,11 @@ header#masthead {
 }
 
 .main-container {
-    margin-left: 230px;
+    margin-left: 193px;
 }
 
 .vertical-menu ul {
-    width: 230px;
+    width: 193px;
 }
 
 .vertical-menu.vertical-menu-clicked {
@@ -213,15 +240,7 @@ header#masthead {
     overflow: hidden;
 }
 
-img.header-logo-m {
-    width: 23px;
-    margin-bottom: 20px;
-}
-
 @media (max-width: 934px) {
-.header-logo-m {
-    display: block;
-}
 .vertical-menu {
     width: 55px;
     max-width: unset;
@@ -291,7 +310,7 @@ footer#colophon {
 
 i.fa.fa-search.search-icon {
     color: #757575;
-    font-size: 1.2em;
+    font-size: 1em;
     margin-right: 0.5em;
 }
 
@@ -303,6 +322,10 @@ i.fa.fa-search.search-icon {
     background: transparent;
     border: 0;
     width: 100%;
+    padding: 3px;
+    line-height: 0;
+    position: relative;
+    top: 1px;
 }
 
 .header-search button.search-submit {
@@ -320,7 +343,7 @@ i.fa.fa-search.search-icon {
 }
 
 .vertical-menu a {
-    color: #fff !important;
+    color: #323638 !important;
     text-decoration: none !important;
 }
 
@@ -331,16 +354,24 @@ i.fa.fa-search.search-icon {
 
 .vertical-menu li.current-menu-item,
 .vertical-menu li:hover {
-    border-left: 2px solid #fff;
-    background: #2a2a2a;
+    border-left: 2px solid #4cadc2;
+    background: #f5f5f5;
+}
+
+.vertical-menu li.current-menu-item a,
+.vertical-menu li:hover a {
+    color: #4cadc2 !important;
 }
 
 .vertical-menu li .fa {
     margin-right: 0.5em;
 }
 
+.vertical-menu {
+    height: calc(100vh - 64px);
+}
 .admin-bar .vertical-menu {
-    height: calc(100vh - 32px);
+    height: calc(100vh - 96px);
 }
 
 .vertical-menu-inner-bottom {
@@ -362,7 +393,7 @@ main article {
 .course-main header.entry-header {
     margin-right: 2.5em;
     position: sticky;
-    top: 2em;
+    top: 8.6em;
     height: fit-content;
 }
 admin-bar .course-main header.entry-header {
@@ -380,7 +411,9 @@ admin-bar .course-main header.entry-header {
 }
 
 .learndash-wrapper .ld-progress .ld-progress-bar .ld-progress-bar-percentage {
-    height: 12px !important;
+        height: 12px !important;
+    background: rgb(242, 253, 255) !important;
+    background: linear-gradient(90deg, rgba(207, 238, 245, 1) 0%, rgba(76, 173, 194, 1) 100%) !important;
 }
 
 .learndash-wrapper .ld-course-status,
@@ -410,7 +443,7 @@ admin-bar .course-main header.entry-header {
 }
 
 .learndash-wrapper .ld-item-list .ld-item-list-item {
-    border: 1px solid #323638 !important;
+    border: 1px solid #ececec !important;
 }
 
 .learndash-wrapper .ld-item-list .ld-item-list-item .ld-item-list-item-preview {
@@ -510,7 +543,7 @@ admin-bar .course-main header.entry-header {
 }
 
 .vertical-menu li .fa {
-    font-size: 1.3em;
+    font-size: 1em;
 }
 
 .header-course-progress {
@@ -659,25 +692,57 @@ a.sidebar-back {
 }
 }
 
-nav#sidebar-navigation {
-    border-top: 1px solid #000000;
+/*nav#sidebar-navigation {
     padding-top: 1em;
+}*/
+
+section.learndash-group-flex-element {
+    padding: 1.5em 1.5em;
+    margin-bottom: 2em;
+    border: 1px solid #ececec !important;
+    border-radius: 6px;
+    background: #fff;
 }
 
+.learndash-wrapper .ld-expand-button {
+    background: transparent !important;
+    padding: 0 !important;
+    color: #4cadc2 !important;
+    font-weight: 400 !important;
+}
 
+.ld-status.ld-status-progress.ld-primary-background {
+    text-transform: none !important;
+    font-weight: 400 !important;
+}
 
+.learndash-wrapper .ld-course-status .ld-status.ld-status-progress {
+    background: #4cadc2 !important;
+}
 
+.learndash-wrapper .ld-progress .ld-progress-heading .ld-progress-stats .ld-progress-percentage {
+    font-weight: 400 !important;
+    text-transform: none !important;
+    color: #4cadc2 !important;
+}
 
+.ld-progress-steps {
+    color: #080808;
+}
 
+.learndash-wrapper .ld-item-list .ld-item-list-item a.ld-item-name:hover {
+    color: #4cadc2;
+}
 
+section.sidebar-top {
+    display: none;
+}
 
-
-
-
-
-
-
-
+.main-container .header-course-progress {
+    padding: 0.5em 1em;
+    border-bottom: 1px solid #ececec;
+    background: #fff;
+}
 
 
 

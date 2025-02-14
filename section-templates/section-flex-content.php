@@ -18,7 +18,16 @@ if( have_rows('flexible_elements') ):
 
         	<section class="text_module section-padding">
 
-        		<?php echo get_sub_field('content'); ?>
+        		<?php 
+                echo get_sub_field('content'); 
+                ?>
+
+                <?php 
+                $button_text = get_sub_field('button_text');
+                $button_link = get_sub_field('button_link');
+                render_acf_button($button_text, $button_link);
+                ?>
+
 
         	</section>
 
@@ -118,6 +127,43 @@ if( have_rows('flexible_elements') ):
                 ?>
 
             </section>
+
+        <?php elseif( get_row_layout() == 'group_display' ): ?>
+
+            <?php 
+            $group = get_sub_field('ld_group');
+            $allowed_roles = get_sub_field('allowed_roles');
+            $dont_show_if_all_courses_complete = get_sub_field('dont_show_if_all_courses_complete');
+            $user_id = get_current_user_id();
+
+
+
+            if ( $group && (!is_user_logged_in() || empty($allowed_roles) || array_intersect($allowed_roles, wp_get_current_user()->roles)) ): ?>
+
+                <section class="learndash-group-flex-element">
+                    <?php 
+                    // override main query
+                    global $wp_query;
+                    $original_query = $wp_query;
+                    $wp_query = new WP_Query([
+                        'post_type' => 'groups',
+                        'p'         => $group->ID
+                    ]);
+
+                    if (have_posts()): while (have_posts()): the_post();
+                        echo '<h2 class="group-flex-element-title">' . get_the_title() . '</h2>';
+                        the_content(); 
+                    endwhile; endif;
+
+                    // Restore original query
+                    $wp_query = $original_query;
+                    wp_reset_postdata();
+                    ?>
+                </section>
+
+                <?php wp_reset_postdata(); ?>
+
+            <?php endif; ?>
 
         <?php // Next section here ?>
 
