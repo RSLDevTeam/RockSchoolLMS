@@ -7,6 +7,7 @@
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
+$current_user = wp_get_current_user();
 ?>
 
 <div class="vertical-menu vertical-menu-clicked">
@@ -16,7 +17,6 @@ defined( 'ABSPATH' ) || exit;
 		<nav id="sidebar-navigation" class="sidebar-navigation">
 					
 			<?php
-
 			wp_nav_menu(
 				array(
 					'theme_location' => 'menu-1',
@@ -24,23 +24,28 @@ defined( 'ABSPATH' ) || exit;
 				)
 			);
 
-			if ( current_user_can('administrator') || current_user_can('instructor') ) {
-			    wp_nav_menu(
-				array(
-					'theme_location' => 'menu-5',
-					'menu_id'        => 'instructor-menu',
+			// Check if user has the 'administrator' or 'instructor' role
+			if ( in_array('administrator', $current_user->roles) || in_array('instructor', $current_user->roles) || in_array('author', $current_user->roles) ) {
+
+				wp_nav_menu(
+					array(
+						'theme_location' => 'menu-4',
+						'menu_id'        => 'instructor-menu',
 					)
 				);
+
 			}
 
+			// Check if user has the 'administrator', parent or 'learner' role
+			if ( in_array('administrator', $current_user->roles) || in_array('learner', $current_user->roles) || in_array('parent', $current_user->roles) ) {
 
-			if ( current_user_can('administrator') || current_user_can('learner') ) {
-			    wp_nav_menu(
-				array(
-					'theme_location' => 'menu-4',
-					'menu_id'        => 'learner-menu',
+				wp_nav_menu(
+					array(
+						'theme_location' => 'menu-5',
+						'menu_id'        => 'learner-menu',
 					)
 				);
+				
 			}
 
 			?>

@@ -51,6 +51,10 @@
 
 		<header id="masthead" class="site-header">
 
+			<div class="mobile-menu-toggle">
+				<i class="fa fa-bars" aria-hidden="true"></i>
+			</div>
+
 			<div class="site-branding">
 				<a href="/">
 					<img class="header-logo" src="<?php echo get_stylesheet_directory_uri(); ?>/img/original-logo-blue.svg" />
@@ -86,6 +90,16 @@
 
 			</nav><!-- #site-navigation -->
 
+			<div class="header-profile">
+				<?php 
+				$current_user = wp_get_current_user();
+				$profile_avatar = get_avatar(get_current_user_id(), 50); 
+				?>
+				<div class="header-name"><?php echo $current_user->user_firstname; ?></div>
+				<div class="header-avatar"><?php echo $profile_avatar; ?></div>
+				<!-- <div class="viewing-as"><?php _e('Viewing as', 'rslfranchise'); ?></div>	 -->
+			</div>
+
 		</header><!-- #masthead -->
 
 		<?php get_template_part( 'section-templates/section', 'sidebar-menu' );  ?>
@@ -93,40 +107,46 @@
 		<div class="main-container">
 
 			<?php 
+			// LearnDash course progress bar - displays on all course content templates unless SoundSlice embed present 
 			$post_type = get_post_type();
-			if ( $post_type === 'sfwd-courses' || $post_type === 'sfwd-lessons' || $post_type === 'sfwd-topic' || $post_type === 'sfwd-quiz' ) : ?>
-
-				<div class="header-course-progress">
-
-					<?php 
-					if (is_singular('sfwd-courses')) {
-					    $course_id = get_the_ID();
-					} else {
-					    $course_id = learndash_get_course_id(get_the_ID());
-					}
-					
-					$user_id = get_current_user_id();
-
-					if ($course_id && $user_id) {
-
-					    global $post; // override LearnDash context for the course
-					    $original_post = $post; 
-					    $post = get_post($course_id); 
-
-						$shortcode_out = do_shortcode( '[ld_infobar course_id="' . $course_id . '" user_id="' . $user_id . '"]' );
-						echo $shortcode_out; 
-
-						$post = $original_post; // original post
-					    wp_reset_postdata(); 
-
-					} else {
-						echo 'Course progress could not be displayed.';
-					}
+			if (!get_field('track_id')) :
+				if ( $post_type === 'sfwd-courses' || $post_type === 'sfwd-lessons' || $post_type === 'sfwd-topic' || $post_type === 'sfwd-quiz' ) : 
+					// if on a LearnDash course element...
 					?>
 
-				</div>
+					<div class="header-course-progress">
 
-			<?php endif; ?>
+						<?php 
+						if (is_singular('sfwd-courses')) {
+						    $course_id = get_the_ID();
+						} else {
+						    $course_id = learndash_get_course_id(get_the_ID());
+						}
+						
+						$user_id = get_current_user_id();
+
+						if ($course_id && $user_id) {
+
+						    global $post; // override LearnDash context for the course
+						    $original_post = $post; 
+						    $post = get_post($course_id); 
+
+							$shortcode_out = do_shortcode( '[ld_infobar course_id="' . $course_id . '" user_id="' . $user_id . '"]' );
+							echo $shortcode_out; 
+
+							$post = $original_post; // original post
+						    wp_reset_postdata(); 
+
+						} else {
+							echo 'Course progress could not be displayed.';
+						}
+						?>
+
+					</div>
+
+				<?php // end LearnDash course element check
+				endif; 
+			endif;?>
 
 			
 

@@ -11,12 +11,6 @@
 
 ?>
 
-			<footer id="colophon" class="site-footer">
-				<div class="site-info">
-					Footer goes here. This is a dev site and not intended for production... yet.
-				</div><!-- .site-info -->
-			</footer><!-- #colophon -->
-
 		</div><!-- close main-container -->
 
 	</div><!-- close site-container -->

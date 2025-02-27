@@ -42,7 +42,47 @@ $has_lesson_quizzes = learndash_30_has_lesson_quizzes( $course_id, $lessons ); ?
 	
 		<header class="entry-header">
 
-			<div class="box-shadow"><?php rslfranchise_post_thumbnail(); ?></div>
+			<div class="course-card-inner">
+
+		        <?php if (has_post_thumbnail()) : ?>
+		            <div class="course-thumbnail">
+		                <?php the_post_thumbnail('large'); ?>
+		            </div>
+		        <?php endif; ?>
+
+		        <div class="course-card-copy">
+		          
+		            <?php
+		            // Fetch the course taxonomies
+		            $levels = get_the_terms(get_the_ID(), 'ld_course_level');
+		            $categories = get_the_terms(get_the_ID(), 'ld_course_category');
+		            $terms = get_the_terms(get_the_ID(), 'ld_course_term');
+		            ?>
+
+		            <div class="course-meta">
+
+		                <?php if ($categories && !is_wp_error($categories)) : ?>
+		                    <div class="course-category course-meta-item"><strong>Category:</strong> 
+		                        <span><?php echo esc_html(implode(', ', wp_list_pluck($categories, 'name'))); ?></span>
+		                    </div>
+		                <?php endif; ?>
+
+		                <?php if ($levels && !is_wp_error($levels)) : ?>
+		                    <div class="course-level course-meta-item"><strong>Level:</strong> 
+		                        <span><?php echo esc_html(implode(', ', wp_list_pluck($levels, 'name'))); ?></span>
+		                    </div>
+		                <?php endif; ?>
+
+		                <?php if ($terms && !is_wp_error($terms)) : ?>
+		                    <div class="course-term course-meta-item"><strong>Term:</strong> 
+		                        <span><?php echo esc_html(implode(', ', wp_list_pluck($terms, 'name'))); ?></span>
+		                    </div>
+		                <?php endif; ?>
+
+		            </div>
+
+		        </div>
+		    </div>
 
 		</header><!-- .entry-header -->
 

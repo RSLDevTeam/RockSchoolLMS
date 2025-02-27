@@ -33,31 +33,115 @@ if( function_exists('acf_add_options_page') ) {
            
 }
 
+// Function to customisse the login screen
+function custom_login_logo() {
+    $logo_path = get_template_directory_uri() . '/img/original-logo-blue.svg'; 
+    echo '<style type="text/css">
+        #login h1 a, .login h1 a {
+            background-image: url(' . $logo_path . ');
+            width:320px;   
+            height:100px;   
+            background-size: 320px 100px;   
+            background-repeat: no-repeat;
+            pointer-events: none;
+        }
+        .wp-core-ui .button-primary, 
+        .wp-core-ui .button-primary:hover {
+            background: #4cadc2 !important;
+            border-color: #4cadc2 !important;
+        }
+        body {
+            display: flex;
+            background: #fcfcfc !important;
+        }
+        div#login {
+            padding: 3.5em 1.5em 1.5em 1.5em;
+            border: 1px solid #ececec !important;
+            border-radius: 6px;
+            background: #fff;
+            box-shadow: 0 4px 20px rgb(235 235 235 / 87%);
+            width: 420px;
+            max-width: 100%;
+        }
+        p#nav {
+            width: fit-content;
+            display: block;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        .login form {
+            border: 0 !important;
+            box-shadow: none !important;
+        }
+        input#wp-submit {
+            border-radius: 0;
+            padding: 5px 25px;
+        }
+        .login .message, .login .notice, .login .success {
+            border-left: 0 !important;
+            border-bottom: 1px solid #d6d6d6;
+            box-shadow: none !important;
+            text-align: center;
+        }
+         p#backtoblog {
+            display: none;
+        }
+        .register-role-select {
+            padding-bottom: 1em !important;
+        }
+        .register-role-select label, select#user_role {
+            width: 100%;
+        }
+        select#user_role {
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        label.privacy_policy_terms {
+            font-size: inherit !important;
+            margin-bottom: 1em !important;
+        }
+   </style>';
+}
+add_action('login_enqueue_scripts', 'custom_login_logo');
+
 // Restrict access to the site for non-logged-in users
 function restrict_site_access() {
     if (!is_user_logged_in() && !is_admin() && !wp_doing_ajax()) {
+
+        // Allow public access to Privacy Policy and Terms & Conditions pages
+        $allowed_pages = ['privacy-policy', 'terms-and-conditions'];
+        if (is_page($allowed_pages)) {
+            return;
+        }
+
         wp_redirect(wp_login_url());
         exit;
+
     }
 }
 add_action('template_redirect', 'restrict_site_access');
 
-// Redirect Learner, Instructor, and Subscriber roles to the homepage after login
-function custom_login_redirect($redirect_to, $request, $user) {
-    if (isset($user->roles) && is_array($user->roles)) {
-        if (in_array('learner', $user->roles) || in_array('instructor', $user->roles) || in_array('subscriber', $user->roles)) {
-            return home_url(); // Redirect to homepage
-        }
-    }
-    return $redirect_to; // Default behavior for other roles
+// Add Privacy Policy and Terms checkbox to registration form
+function custom_register_form_terms_checkbox() {
+    ?>
+    <p>
+        <label for="privacy_policy_terms" class="privacy_policy_terms">
+            <input type="checkbox" name="privacy_policy_terms" id="privacy_policy_terms" value="1" required />
+            <?php printf(__('I agree to the <a href="%s" target="_blank">Privacy Policy</a> and <a href="%s" target="_blank">Terms & Conditions</a>.', 'your-text-domain'), 
+                esc_url(home_url('/privacy-policy')), 
+                esc_url(home_url('/terms-and-conditions'))
+            ); ?>
+        </label>
+    </p>
+    <?php
 }
-add_filter('login_redirect', 'custom_login_redirect', 10, 3);
+add_action('register_form', 'custom_register_form_terms_checkbox');
 
-// Prevent Learner, Instructor, and Subscriber from accessing wp-admin
-function restrict_admin_access() {
-    if (is_admin() && !current_user_can('edit_posts') && !wp_doing_ajax()) {
-        wp_redirect(home_url());
-        exit;
+// Validate the checkbox field
+function custom_register_form_terms_validation($errors, $sanitized_user_login, $user_email) {
+    if (empty($_POST['privacy_policy_terms'])) {
+        $errors->add('privacy_policy_terms_error', __('<strong>ERROR:</strong> You must agree to the Privacy Policy and Terms & Conditions.', 'your-text-domain'));
     }
+    return $errors;
 }
-add_action('admin_init', 'restrict_admin_access');
+add_filter('registration_errors', 'custom_register_form_terms_validation', 10, 3);

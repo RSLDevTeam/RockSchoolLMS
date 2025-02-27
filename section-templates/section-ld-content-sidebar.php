@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 
 ?>
 
-<div class="ld-content-sidebar">
+<section class="dashboard-section ld-content-sidebar">
 
 	<div class="ld-content-sidebar-nav-toggle"><?php _e('Contents', 'rslfranchise');  ?> <i class="fa fa-angle-down" aria-hidden="true"></i></div>
 
@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
 
 	</div>
 
-</div>
+</section>
 
 	
 

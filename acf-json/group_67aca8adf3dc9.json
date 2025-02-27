@@ -1,0 +1,136 @@
+{
+    "key": "group_67aca8adf3dc9",
+    "title": "User fields",
+    "fields": [
+        {
+            "key": "field_67aca8aeaa4f0",
+            "label": "Is institution",
+            "name": "is_institution",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable if this user is a member of an institution (ie: not a solo teacher)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_67adab2480f20",
+            "label": "Onboarding completed",
+            "name": "onboarding_completed",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable when initial onboarding is completed",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_67adab4a80f21",
+            "label": "DBS check",
+            "name": "dbs_check",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable when DBS check has been verified",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_67af4f45ab897",
+            "label": "Linked learners",
+            "name": "linked_learners",
+            "aria-label": "",
+            "type": "user",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "role": "",
+            "return_format": "array",
+            "multiple": 1,
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "bidirectional": 0,
+            "bidirectional_target": []
+        },
+        {
+            "key": "field_67be30aa1e706",
+            "label": "Is child",
+            "name": "is_child",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable to mark this user as a child (under 18)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "user_role",
+                "operator": "==",
+                "value": "all"
+            },
+            {
+                "param": "user_form",
+                "operator": "==",
+                "value": "edit"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1740647251
+}
