@@ -22,8 +22,11 @@ if (!empty($_POST['link_instructor_nonce']) && wp_verify_nonce($_POST['link_inst
 
     // Validation
     if (empty($instructor_email) || !is_email($instructor_email)) {
+
         $error_messages[] = __('Please enter a valid email address.', 'rslfranchise');
+
     } else {
+        
         // Check if a user with this email exists
         $user = get_user_by('email', $instructor_email);
 
@@ -32,12 +35,14 @@ if (!empty($_POST['link_instructor_nonce']) && wp_verify_nonce($_POST['link_inst
             $linked_learners = get_field('linked_learners', 'user_' . $user->ID) ?: [];
             
             if (!in_array($user_id, $linked_learners)) {
+
                 $linked_learners[] = $user_id;
                 update_field('linked_learners', $linked_learners, 'user_' . $user->ID);
 
                 // Redirect to avoid resubmission
                 wp_safe_redirect(add_query_arg('success', 'linked', get_permalink()));
                 exit;
+
             } else {
                 $error_messages[] = __('You are already linked to this instructor.', 'rslfranchise');
             }
@@ -47,9 +52,11 @@ if (!empty($_POST['link_instructor_nonce']) && wp_verify_nonce($_POST['link_inst
             $invite_sent = send_instructor_invite($instructor_email, $current_user);
 
             if ($invite_sent) {
+
                 // Redirect after sending invite
                 wp_safe_redirect(add_query_arg('success', 'invited', get_permalink()));
                 exit;
+
             } else {
                 $error_messages[] = __('There was an error sending the invite. Please try again later.', 'rslfranchise');
             }
@@ -119,7 +126,7 @@ function send_instructor_invite($email, $inviter) {
         <h3><?php _e('Link an Instructor', 'rslfranchise'); ?></h3>
         <p><?php _e('Enter the email of an instructor to link with them.', 'rslfranchise'); ?></p>
 
-        <form method="POST" class="link-instructor-form">
+        <form method="POST" class="link-instructor-form add-learner-form">
             <?php wp_nonce_field('link_instructor_action', 'link_instructor_nonce'); ?>
 
             <div class="form-group">

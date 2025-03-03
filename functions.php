@@ -186,6 +186,11 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 }
 
 /**
+ * Composer.
+ */
+require get_template_directory() . '/vendor/autoload.php';
+
+/**
  * Custom user roles.
  */
 require get_template_directory() . '/inc/user-roles.php';
