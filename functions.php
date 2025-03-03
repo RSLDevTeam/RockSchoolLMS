@@ -186,7 +186,7 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 }
 
 /**
- * Composer.
+ * Composer autoload.
  */
 require get_template_directory() . '/vendor/autoload.php';
 
@@ -199,6 +199,16 @@ require get_template_directory() . '/inc/user-roles.php';
  * Custom and misc functions.
  */
 require get_template_directory() . '/inc/learndash.php';
+
+/**
+ * Custom post types.
+ */
+require get_template_directory() . '/inc/cpt-homework.php';
+
+/**
+ * AWS functions.
+ */
+require get_template_directory() . '/inc/aws-functions.php';
 
 /**
  * LearnDash functions.
