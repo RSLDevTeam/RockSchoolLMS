@@ -206,9 +206,19 @@ require get_template_directory() . '/inc/learndash.php';
 require get_template_directory() . '/inc/cpt-homework.php';
 
 /**
+ * Homework functions.
+ */
+require get_template_directory() . '/inc/homework-functions.php';
+
+/**
  * AWS functions.
  */
 require get_template_directory() . '/inc/aws-functions.php';
+
+/**
+ * AWS shortcode.
+ */
+require get_template_directory() . '/inc/aws-shortcode.php';
 
 /**
  * LearnDash functions.

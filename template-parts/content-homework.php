@@ -21,11 +21,18 @@ $learner_avatar = get_avatar($learner_id, 50);
 $learner_name = $learner['display_name'];
 $instructor_avatar = get_avatar($instructor_id, 50); 
 $instructor_name = $instructor['display_name'];
+$homework_id = get_the_ID();
+$submitted_files = get_post_meta($homework_id, 'project_file_url');
+$aws_options = get_option('aws_options');
+
+$response = get_field('response');
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 	<div class="entry-content homework-content">
+
+		<a href="/homework/"><div class="back-to-link"><i class="fa fa-arrow-left" aria-hidden="true"></i><?php _e('All homework', 'rslfranchise'); ?></div></a>
 
 		<?php if (!$current_user_id || (!$is_admin && $current_user_id !== $learner_id && $current_user_id !== $instructor_id)) : ?>
 
@@ -39,23 +46,56 @@ $instructor_name = $instructor['display_name'];
 			</header><!-- .entry-header -->
 
 			<section class="homework-thread">
+
 				<div class="homework-intructor-message homework-message-item">
-					<div class="homework-message">
-						<?php echo get_field('task'); ?>
-					</div>
+
 					<div class="homework-person">
 						<?php echo $instructor_avatar; ?>
 						<strong><?php echo esc_html($instructor_name); ?> </strong>
 					</div>
+
+					<div class="homework-message">
+						<?php echo get_field('task'); ?>
+					</div>
+
 				</div>
+
+				<?php if (get_field('response')) : ?>
+					<div class="homework-learner-message homework-message-item">
+
+						<div class="homework-message">
+							<?php echo get_field('response'); ?>
+							<?php if ( !empty($submitted_files) ): ?>
+					            <ul>
+					                <?php foreach ($submitted_files as $file_url): ?>
+					                    <?php
+					                    $file_key = str_replace('https://s3.eu-west-1.wasabisys.com/' . $aws_options['bucket_name'] . '/', '', $file_url);
+					                    $presigned_url = generate_presigned_view_url($file_key);
+					                    ?>
+					                    <li><a href="<?php echo esc_url($presigned_url); ?>" target="_blank"><?php echo basename($file_url); ?></a></li>
+					                <?php endforeach; ?>
+					            </ul>
+					        <?php endif; ?>
+						</div>
+
+						<div class="homework-person">
+							<?php echo $learner_avatar; ?>
+							<strong><?php echo esc_html($learner_name); ?> </strong>
+						</div>
+
+					</div>
+				<?php endif; ?>
+
 			</section>
 
-			<section class="homework-response">
-				<h2><?php _e('Homework response', 'rslfranchise'); ?></h2>
-				<?php echo get_field('response'); ?>
-			</section>
+			<?php if (!$response) : ?>
 
-			<section class="dashboard-section"><?php echo do_shortcode('[project_submission_ajax_s3]'); ?></section>
+				<section class="dashboard-section">
+					<h2><?php _e('Homework response', 'rslfranchise'); ?></h2>
+					<?php echo do_shortcode('[project_submission_ajax_s3]'); ?>
+				</section>
+
+			<?php endif; ?>
 		
 		<?php endif; ?>
 

@@ -62,6 +62,12 @@ $acf_user_id = 'user_' . $current_user->ID;
 
 				<?php if ( in_array('administrator', $current_user->roles) || in_array('learner', $current_user->roles) || in_array('parent', $current_user->roles) ) : 
 
+					get_template_part( 'snippets/dashboard', 'learner-homework' ); 
+					
+				endif;	?>
+
+				<?php if ( in_array('administrator', $current_user->roles) || in_array('learner', $current_user->roles) || in_array('parent', $current_user->roles) ) : 
+
 					get_template_part( 'snippets/dashboard', 'linked-instructors' ); 
 					
 				endif;	?>

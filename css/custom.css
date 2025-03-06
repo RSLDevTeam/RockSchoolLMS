@@ -1217,7 +1217,7 @@ div#project-upload-form-ajax ul {
     margin-top: 1em;
 }
 
-.homework-intructor-message {
+.homework-message-item {
     display: flex;
 }
 
@@ -1233,13 +1233,14 @@ div#project-upload-form-ajax ul {
     background: #ececec;
     padding: 1em;
     position: relative;
+    width: 100%;
 }
 
-.homework-intructor-message .homework-message {
-    margin-right: 5%;
+.homework-learner-message .homework-message {
+    margin-right: 40px;
 }
 
-.homework-intructor-message .homework-message::after {
+.homework-learner-message .homework-message::after {
     content: '';
     position: absolute;
     right: 0;
@@ -1258,9 +1259,80 @@ div#project-upload-form-ajax ul {
     margin-bottom: 2em;
 }
 
+.homework-intructor-message .homework-message {
+    margin-left: 40px;
+}
+
+.homework-intructor-message .homework-message::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 30px solid transparent;
+    border-right-color: #ececec;
+    border-left: 0;
+    border-bottom: 0;
+    margin-top: -15px;
+    margin-left: -30px;
+}
 
 div#upload_status_ajax {
     margin-top: 1em;
+}
+
+div#progress_bar_ajax,
+div#overall_progress_bar_ajax {
+    background: #f2fdff !important;
+    background: linear-gradient(90deg, rgba(207, 238, 245, 1) 0, rgba(76, 173, 194, 1) 100%) !important;
+}
+
+.homework-message ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.homework-person img.avatar.avatar-50.photo {
+    border-radius: 100%;
+}
+
+div#project-upload-form-ajax input#project_files_ajax,
+textarea#response_text_ajax {
+    margin-bottom: 1em;
+}
+
+.back-to-link {
+    margin-bottom: 1em;
+}
+
+.back-to-link .fa {
+    margin-right: 6px;
+}
+
+.homework-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0.5em;
+}
+
+.homework-excerpt {
+    font-style: italic;
+}
+
+.homework-preview-title {
+    font-weight: 600;
+}
+
+.homework-thread {
+    margin-top: 2em;
+}
+
+form.create-homework label {
+    display: block;
 }
 
 
