@@ -381,6 +381,8 @@ main article {
     position: sticky;
     top: 8.6em;
     height: fit-content;
+    width: 100%;
+    max-width: 364px;
 }
 admin-bar .course-main header.entry-header {
     top: 2em;
@@ -953,11 +955,11 @@ article.w-soundslice {
     padding-bottom: 0;
 }
 
-.learndash header.entry-header {
+/*.learndash header.entry-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+}*/
 
 .width-toggle {
     border: 2px solid #323638;
