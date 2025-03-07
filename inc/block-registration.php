@@ -18,4 +18,4 @@ function custom_enqueue_soundslice_assets() {
 add_action('init', 'custom_enqueue_soundslice_assets');
 
 // Load block registration
-require_once get_template_directory() . '/inc/blocks/soundslice.php';
+require_once get_stylesheet_directory() . '/assets/blocks/soundslice.php';
