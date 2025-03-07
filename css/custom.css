@@ -955,11 +955,11 @@ article.w-soundslice {
     padding-bottom: 0;
 }
 
-/*.learndash header.entry-header {
+.learndash header.entry-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}*/
+}
 
 .width-toggle {
     border: 2px solid #323638;

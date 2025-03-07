@@ -59,10 +59,10 @@ function custom_login_logo() {
         }
         div#login {
             padding: 3.5em 1.5em 1.5em 1.5em;
-            border: 1px solid #ececec !important;
+            border: 1px solid #c4c4c4 !important;
             border-radius: 6px;
             background: #fff;
-            box-shadow: 0 4px 20px rgb(235 235 235 / 87%);
+            box-shadow: 0 4px 20px rgb(176 176 176 / 87%);
             width: 420px;
             max-width: 100%;
         }
