@@ -1337,7 +1337,9 @@ form.create-homework label {
     display: block;
 }
 
-
+.sl-mini-player-holder {
+    margin: 1em 0;
+}
 
 
 

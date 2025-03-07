@@ -11,5 +11,5 @@ function custom_render_soundslice_block($attributes) {
     if (empty($attributes['soundsliceId'])) {
         return '<p>Please enter a Soundslice ID.</p>';
     }
-    return '<iframe src="https://www.soundslice.com/slices/' . esc_attr($attributes['soundsliceId']) . '/embed-mini/" width="100%" height="293" frameBorder="0"></iframe>';
+    return '<div class="sl-mini-player-holder"><iframe src="https://www.soundslice.com/slices/' . esc_attr($attributes['soundsliceId']) . '/embed-mini/" width="100%" height="293" frameBorder="0"></iframe></div>';
 }
