@@ -234,3 +234,6 @@ require get_template_directory() . '/inc/dev.php';
  * Snippet functions.
  */
 require get_template_directory() . '/inc/snippets.php';
+
+
+require_once get_template_directory() . '/inc/jwt-sso.php';
