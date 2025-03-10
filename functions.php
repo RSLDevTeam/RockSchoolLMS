@@ -236,4 +236,7 @@ require get_template_directory() . '/inc/dev.php';
 require get_template_directory() . '/inc/snippets.php';
 
 
+/**
+ * JWT Single Sign on functions.
+ */
 require_once get_template_directory() . '/inc/jwt-sso.php';
