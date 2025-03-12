@@ -5,6 +5,8 @@
  * @package rslfranchise
  */
 
+$course_id = get_the_ID();
+
 global $current_user;
 wp_get_current_user();
 $acf_user_id = 'user_' . $current_user->ID;
@@ -16,37 +18,22 @@ $linked_learners = [];
 if ((in_array('administrator', $current_user->roles) || in_array('parent', $current_user->roles)) && $allow_parent_transfer) {
     $linked_learners = get_field('linked_learners', $acf_user_id) ?: [];
 }
-// Handle course assignment on form submission
-if (!empty($_POST['assign_course_nonce']) && wp_verify_nonce($_POST['assign_course_nonce'], 'assign_course_action')) {
-    $course_id = intval($_POST['course_id']);
-    $learner_id = intval($_POST['learner_id']);
-
-    // Ensure the learner is linked to the current user and the course ID is valid
-    if (in_array($learner_id, array_column($linked_learners, 'ID')) && get_post_type($course_id) === 'sfwd-courses') {
-        // Unenroll the parent/admin from the course
-        ld_update_course_access($current_user->ID, $course_id, true); // Unenroll current user (parent/admin)
-
-        // Enroll the learner in the course
-        ld_update_course_access($learner_id, $course_id, false);
-
-        // Redirect with success message and link to manage learner
-        $redirect_url = add_query_arg([
-            'assigned'   => '1',
-            'course_id'  => $course_id,
-            'learner_id' => $learner_id
-        ], home_url($_SERVER['REQUEST_URI']));
-
-        wp_safe_redirect($redirect_url);
-        exit;
-    } else {
-        $error_message = __('Invalid learner or course.', 'rslfranchise');
+// check if in SOW group
+$group_category = get_field('schemes_of_work_taxonomy', 'option');
+$classes = '';
+$group_ids = learndash_get_course_groups($course_id);
+if (!empty($group_ids)) {
+    foreach ($group_ids as $group_id) {
+        if (has_term($group_category, 'ld_group_category', $group_id)) {
+            $classes = 'sow-course';
+            break;
+        }
     }
 }
-// course transfer gubbins end
 
 ?>
 
-<div class="course-card-inner">
+<div class="course-card-inner <?php echo $classes; ?>">
 
     <?php if (has_post_thumbnail()) : ?>
         <a href="<?php echo get_permalink(); ?>">
@@ -119,3 +106,32 @@ if (!empty($_POST['assign_course_nonce']) && wp_verify_nonce($_POST['assign_cour
 
     </div>
 </div>
+
+<?php
+// Handle course assignment on form submission
+if (!empty($_POST['assign_course_nonce']) && wp_verify_nonce($_POST['assign_course_nonce'], 'assign_course_action')) {
+    $course_id = intval($_POST['course_id']);
+    $learner_id = intval($_POST['learner_id']);
+
+    // Ensure the learner is linked to the current user and the course ID is valid
+    if (in_array($learner_id, array_column($linked_learners, 'ID')) && get_post_type($course_id) === 'sfwd-courses') {
+        // Unenroll the parent/admin from the course
+        ld_update_course_access($current_user->ID, $course_id, true); // Unenroll current user (parent/admin)
+
+        // Enroll the learner in the course
+        ld_update_course_access($learner_id, $course_id, false);
+
+        // Redirect with success message and link to manage learner
+        $redirect_url = add_query_arg([
+            'assigned'   => '1',
+            'course_id'  => $course_id,
+            'learner_id' => $learner_id
+        ], home_url($_SERVER['REQUEST_URI']));
+
+        wp_safe_redirect($redirect_url);
+        exit;
+    } else {
+        $error_message = __('Invalid learner or course.', 'rslfranchise');
+    }
+}
+// course transfer gubbins end

@@ -1341,6 +1341,28 @@ form.create-homework label {
     margin: 1em 0;
 }
 
+@media (min-width: 1175px) {
+    .sow-course .course-main header.entry-header {
+        top: 6em;
+    }
+}
+
+.sow-course .ld-status-icon,
+.sow-course .header-course-progress,
+.sow-course span.ld-lesson-list-progress,
+.sow-course input.learndash_mark_complete_button,
+.sow-course .ld-topic-status,
+.sow-course .ld-lesson-status,
+.sow-course .course-progress {
+    display: none !important;
+}
+
+
+
+
+
+
+
 
 
 
