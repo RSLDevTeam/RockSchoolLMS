@@ -1357,9 +1357,30 @@ form.create-homework label {
     display: none !important;
 }
 
+@media (max-width:767px) {
+.learndash-wrapper:not(.ld-registration__outer-wrapper) .ld-content-actions>* {
+    margin-bottom: 0 !important;
+}
+.ld-content-actions {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+}
 
-
-
+@media (max-width: 640px) {
+a.ld-primary-color.ld-course-step-back {
+    font-size: 0.75em !important;
+}
+.learndash-wrapper:not(.ld-registration__outer-wrapper) .ld-content-actions {
+    flex-direction: row !important;
+}
+.learndash-wrapper:not(.ld-registration__outer-wrapper) .ld-content-actions div:nth-child(2) {
+    order: inherit !important;
+}
+.ld-content-action {
+    padding: 0 !important;
+}
+}
 
 
 
