@@ -76,6 +76,18 @@ if ($soundslice_id) { $soundsice_class = 'w-soundslice'; } else { $soundsice_cla
 
 			</div>
 
+		<?php else : ?>
+
+			<?php
+			wp_enqueue_script(
+			    'soundslice-embed',
+			    get_template_directory_uri() . '/js/soundslice-embed.js',
+			    array(),
+			    filemtime(get_template_directory() . '/js/soundslice-embed.js'),
+			    true
+			);
+			?>
+
 		<?php endif; ?>
 
 		<div class="<?php if ($soundslice_id) { echo 'col'; } else { echo 'col-lg-9'; } ?>">
