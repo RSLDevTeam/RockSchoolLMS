@@ -57,7 +57,7 @@
 
 			<div class="site-branding">
 				<a href="/">
-					<img class="header-logo" src="<?php echo get_stylesheet_directory_uri(); ?>/img/original-logo-blue.svg" />
+					<img class="header-logo" src="<?php echo get_stylesheet_directory_uri(); ?>/img/rs-nopick-logo.svg" />
 				</a>
 			</div>
 
