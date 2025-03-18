@@ -54,7 +54,42 @@ if ($soundslice_id) { $soundsice_class = 'w-soundslice'; } else { $soundsice_cla
 
 				<?php get_template_part( 'section-templates/section', 'ld-content-sidebar' );  ?>
 
+				<script>
+				    const currentLessonId = <?php echo $lesson_post->ID; ?>;
+
+				    document.addEventListener('DOMContentLoaded', function () {
+				        console.log('DOM fully loaded and parsed');
+
+				        const observer = new MutationObserver(function (mutations, observerInstance) {
+				            const expandButton = document.querySelector(`#ld-expand-${currentLessonId} .ld-expand-button`);
+				            if (expandButton) {
+				                console.log('Expand button found. Triggering click.');
+				                expandButton.click();
+				                observerInstance.disconnect(); // Stop observing once the button is clicked
+				            }
+				        });
+
+				        // Observe changes to the DOM
+				        observer.observe(document.body, {
+				            childList: true,
+				            subtree: true,
+				        });
+				    });
+				</script>
+
 			</div>
+
+		<?php else : ?>
+
+			<?php
+			wp_enqueue_script(
+			    'soundslice-embed',
+			    get_template_directory_uri() . '/js/soundslice-embed.js',
+			    array(),
+			    filemtime(get_template_directory() . '/js/soundslice-embed.js'),
+			    true
+			);
+			?>
 
 		<?php endif; ?>
 
@@ -63,6 +98,10 @@ if ($soundslice_id) { $soundsice_class = 'w-soundslice'; } else { $soundsice_cla
 			<header class="entry-header">
 
 				<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+
+				<?php if ($soundslice_id) : ?>
+					<div class="width-toggle"><i class="fa fa-arrows-h" aria-hidden="true"></i></div>
+				<?php endif; ?>
 
 			</header><!-- .entry-header -->
 

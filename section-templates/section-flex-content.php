@@ -269,6 +269,8 @@ if( have_rows('flexible_elements') ):
                 'post__in'       => !empty($course_ids) ? $course_ids : [0],
                 'posts_per_page' => -1,
                 'tax_query'      => !empty($tax_query) ? $tax_query : '',
+                'orderby'        => 'menu_order',
+                'order'          => 'ASC',
             ];
 
             if (!empty($course_ids)) {

@@ -35,14 +35,14 @@ if( function_exists('acf_add_options_page') ) {
 
 // Function to customisse the login screen
 function custom_login_logo() {
-    $logo_path = get_template_directory_uri() . '/img/original-logo-blue.svg'; 
+    $logo_path = get_template_directory_uri() . '/img/rs-pick-logo.svg'; 
     $bg_path = get_template_directory_uri() . '/img/RSL-PP-BKG-Blank.jpg'; 
     echo '<style type="text/css">
         #login h1 a, .login h1 a {
             background-image: url(' . $logo_path . ');
-            width:320px;   
-            height:100px;   
-            background-size: 320px 100px;   
+            width:350px;   
+            height:120px;   
+            background-size: 350px 120px;   
             background-repeat: no-repeat;
             pointer-events: none;
         }

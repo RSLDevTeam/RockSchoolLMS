@@ -234,19 +234,3 @@ require get_template_directory() . '/inc/dev.php';
  * Snippet functions.
  */
 require get_template_directory() . '/inc/snippets.php';
-
-
-/**
- * JWT Single Sign on functions.
- */
-require_once get_template_directory() . '/inc/jwt-sso.php';
-
-/**
- * User action register hook cloud API.
- */
-require_once get_template_directory() . '/inc/user-action-register.php';
-
-/**
- * User action Login hook cloud API.
- */
-require_once get_template_directory() . '/inc/user-action-login.php';

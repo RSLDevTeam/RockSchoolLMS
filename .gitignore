@@ -1,2 +1,6 @@
 .DS_Store
 sftp-config.json
+
+.vscode/
+.idea/
+node_modules/
