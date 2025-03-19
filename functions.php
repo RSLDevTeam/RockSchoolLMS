@@ -234,3 +234,8 @@ require get_template_directory() . '/inc/dev.php';
  * Snippet functions.
  */
 require get_template_directory() . '/inc/snippets.php';
+
+/**
+ * Search Webhook functions.
+ */
+require get_template_directory() . '/inc/search-webhook.php';
