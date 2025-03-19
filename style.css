@@ -1142,7 +1142,7 @@ textarea {
 }
 
 .notfound a:hover {
-	color: #fff;
+	color: #fff !important;
 	background-color: #00b5c3;
 }
 
