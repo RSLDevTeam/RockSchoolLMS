@@ -40,10 +40,10 @@
                     if ($post) :
                         setup_postdata($post);
 												?>
-												<div class="col-md-6 col-lg-3">
-												<?php
-                        get_template_part('template-parts/loop', 'sfwd-courses'); 
-												?>
+												<div class="col-md-6 col-lg-4">
+													<?php
+														get_template_part('template-parts/loop', 'sfwd-courses'); 
+													?>
 												</div>
 												<?php
                     endif;

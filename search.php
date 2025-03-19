@@ -11,17 +11,18 @@ get_header();
 ?>
 
 	<main id="primary" class="site-main">
+		<header class="page-header">
+			<h1 class="page-title">
+				<?php
+				/* translators: %s: search query. */
+				printf( esc_html__( 'Search Results for: %s', 'rslfranchise' ), '<span>' . get_search_query() . '</span>' );
+				?>
+			</h1>
+		</header><!-- .page-header -->
 
 		<?php if ( have_posts() ) : ?>
 
-			<header class="page-header">
-				<h1 class="page-title">
-					<?php
-					/* translators: %s: search query. */
-					printf( esc_html__( 'Search Results for: %s', 'rslfranchise' ), '<span>' . get_search_query() . '</span>' );
-					?>
-				</h1>
-			</header><!-- .page-header -->
+			
 
 			<?php
 			$allow_parent_transfer = get_sub_field('allow_parent_transfer');
@@ -54,10 +55,7 @@ get_header();
 						$courses_by_category['Ungrouped Courses'][] = $course_id;
 				}
 			endwhile;
-			else :
-				// If no courses found, store under "No Courses Found"
-				$courses_by_category['No Courses Found'] = [];
-			endif;
+			
 
 			// Remove duplicate course IDs in each category
 			foreach ($courses_by_category as $category_name => $courses) {
@@ -70,7 +68,14 @@ get_header();
 			get_template_part( 'template-parts/content', 'search' );
 			
 		the_posts_navigation();
+		else :
+			// If no courses found, display a message not found
+			?>
 
+			<?php
+			get_template_part( 'template-parts/content', 'none' );
+			
+		endif;
 		?>
 			
 
