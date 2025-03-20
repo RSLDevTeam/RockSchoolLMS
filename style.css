@@ -1060,6 +1060,11 @@ textarea {
 	border-bottom: 1px solid #ecf0f1;
 }
 
+#search-tabs {
+	margin: 0;
+}
+
+/* 404 */
 #notfound {
 	position: relative;
 	height: 55vh;

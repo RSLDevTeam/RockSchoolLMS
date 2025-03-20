@@ -9,8 +9,32 @@
 ?>
 
 <?php if (!empty($courses_by_category)) : ?>
+
+		<!-- If category is only one> -->
+		<?php if (count($courses_by_category) == 1) : ?>
+			<div class="row">
+				<?php
+				foreach ($courses_by_category as $category_name => $post_ids) :
+					foreach ($post_ids as $post_id) :
+						$post = get_post($post_id);
+						if ($post) :
+							setup_postdata($post);
+							?>
+							<div class="col-md-6 col-lg-4">
+								<?php
+								get_template_part('template-parts/loop', 'sfwd-courses');
+								?>
+							</div>
+							<?php
+						endif;
+					endforeach;
+				endforeach;
+				wp_reset_postdata();
+				?>
+			</div>
+		<?php else : ?>
     <!-- Nav Tabs -->
-    <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
+    <ul class="nav nav-tabs text-center" id="search-tabs" role="tablist">
         <?php 
         $first = true; // To mark the first tab as active
         foreach ($courses_by_category as $category_name => $post_ids) : 
@@ -27,7 +51,7 @@
     </ul>
 
     <!-- Tab Content -->
-    <div class="tab-content" id="myTabContent">
+    <div class="tab-content" id="search-tab-content">
         <?php 
         $first = true; // Reset for tab content
         foreach ($courses_by_category as $category_name => $post_ids) : 
@@ -57,4 +81,5 @@
         endforeach; 
         ?>
     </div>
+		<?php endif; ?>
 <?php endif; ?>

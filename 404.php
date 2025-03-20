@@ -11,7 +11,7 @@ get_header();
 ?>
 
 	<main id="primary" class="site-main">
-
+	<article id="post-<?php the_ID(); ?>">
 		<section class="error-404 not-found">
 			<div id="notfound">
 				<div class="notfound">
@@ -24,7 +24,7 @@ get_header();
 				</div>
 			</div>
 		</section><!-- .error-404 -->
-
+	</article>
 	</main><!-- #main -->
 
 <?php

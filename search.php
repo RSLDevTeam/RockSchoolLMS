@@ -11,6 +11,7 @@ get_header();
 ?>
 
 	<main id="primary" class="site-main">
+		<article id="post-<?php the_ID(); ?>">
 		<header class="page-header">
 			<h1 class="page-title">
 				<?php
@@ -78,9 +79,8 @@ get_header();
 		endif;
 		?>
 			
-
+		</article>
 	</main><!-- #main -->
-
 <?php
 get_sidebar();
 get_footer();
