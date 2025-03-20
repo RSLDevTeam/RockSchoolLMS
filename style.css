@@ -397,59 +397,59 @@ html {
 --------------------------------------------- */
 
 @font-face {
-    font-family: 'Webnar';
-    src: url('fonts/webnar-thin.woff2') format('woff2'),
-         url('fonts/webnar-thin.woff') format('woff');
-    font-weight: 100;
-    font-style: normal;
+	font-family: 'Webnar';
+	src: url('fonts/webnar-thin.woff2') format('woff2'),
+		url('fonts/webnar-thin.woff') format('woff');
+	font-weight: 100;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'Webnar';
-    src: url('fonts/webnar-light.woff2') format('woff2'),
-         url('fonts/webnar-light.woff') format('woff');
-    font-weight: 300;
-    font-style: normal;
+	font-family: 'Webnar';
+	src: url('fonts/webnar-light.woff2') format('woff2'),
+		url('fonts/webnar-light.woff') format('woff');
+	font-weight: 300;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'Webnar';
-    src: url('fonts/webnar-regular.woff2') format('woff2'),
-         url('fonts/webnar-regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
+	font-family: 'Webnar';
+	src: url('fonts/webnar-regular.woff2') format('woff2'),
+		url('fonts/webnar-regular.woff') format('woff');
+	font-weight: 400;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'Webnar';
-    src: url('fonts/webnar-medium.woff2') format('woff2'),
-         url('fonts/webnar-medium.woff') format('woff');
-    font-weight: 500;
-    font-style: normal;
+	font-family: 'Webnar';
+	src: url('fonts/webnar-medium.woff2') format('woff2'),
+		url('fonts/webnar-medium.woff') format('woff');
+	font-weight: 500;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'Webnar';
-    src: url('fonts/webnar-semibold.woff2') format('woff2'),
-         url('fonts/webnar-semibold.woff') format('woff');
-    font-weight: 600;
-    font-style: normal;
+	font-family: 'Webnar';
+	src: url('fonts/webnar-semibold.woff2') format('woff2'),
+		url('fonts/webnar-semibold.woff') format('woff');
+	font-weight: 600;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'Webnar';
-    src: url('fonts/webnar-bold.woff2') format('woff2'),
-         url('fonts/webnar-bold.woff') format('woff');
-    font-weight: 700;
-    font-style: normal;
+	font-family: 'Webnar';
+	src: url('fonts/webnar-bold.woff2') format('woff2'),
+		url('fonts/webnar-bold.woff') format('woff');
+	font-weight: 700;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'Webnar';
-    src: url('fonts/webnar-black.woff2') format('woff2'),
-         url('fonts/webnar-black.woff') format('woff');
-    font-weight: 900;
-    font-style: normal;
+	font-family: 'Webnar';
+	src: url('fonts/webnar-black.woff2') format('woff2'),
+		url('fonts/webnar-black.woff') format('woff');
+	font-weight: 900;
+	font-style: normal;
 }
 
 body,
@@ -551,8 +551,8 @@ ol {
 	list-style: decimal;
 }
 
-li > ul,
-li > ol {
+li>ul,
+li>ol {
 	margin-bottom: 0;
 	margin-left: 1.5em;
 }
@@ -729,8 +729,8 @@ textarea {
 	top: 0;
 }
 
-.main-navigation ul ul li:hover > ul,
-.main-navigation ul ul li.focus > ul {
+.main-navigation ul ul li:hover>ul,
+.main-navigation ul ul li.focus>ul {
 	display: block;
 	left: auto;
 }
@@ -739,8 +739,8 @@ textarea {
 	width: 200px;
 }
 
-.main-navigation ul li:hover > ul,
-.main-navigation ul li.focus > ul {
+.main-navigation ul li:hover>ul,
+.main-navigation ul li.focus>ul {
 	left: auto;
 }
 
@@ -771,10 +771,8 @@ textarea {
 }
 
 .site-main .comment-navigation,
-.site-main
-.posts-navigation,
-.site-main
-.post-navigation {
+.site-main .posts-navigation,
+.site-main .post-navigation {
 	margin: 0 0 1.5em;
 }
 
@@ -1022,4 +1020,155 @@ textarea {
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 1.5em;
+}
+
+
+/* TABS */
+
+.nav-link {
+	padding: 16px 25px 12px !important;
+	font-size: 14px !important;
+	font-weight: 700 !important;
+	font-style: normal;
+	text-transform: uppercase;
+	color: #737c85 !important;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	border: none !important;
+	border-bottom: 4px solid transparent !important;
+}
+
+.nav-tabs .nav-link.active {
+	border-bottom: 4px solid #85d6de !important;
+	color: #737c85;
+}
+
+
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+	outline: 0;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+	color: white !important;
+}
+
+.tab-content {
+	padding-left: 0;
+	padding-right: 0;
+	border: none;
+}
+
+.tab-pane {
+	padding: 50px 0;
+	border-bottom: 1px solid #ecf0f1;
+}
+
+#search-tabs {
+	margin: 0;
+}
+
+/* 404 */
+#notfound {
+	position: relative;
+	height: 55vh;
+}
+
+#notfound .notfound {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.notfound {
+	max-width: 710px;
+	width: 100%;
+	padding-left: 190px;
+	line-height: 1.4;
+}
+
+.notfound .notfound-404 {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 150px;
+	height: 150px;
+}
+
+.notfound .notfound-404 h1 {
+	display: contents;
+	font-family: 'Passion One', cursive;
+	color: #00b5c3;
+	font-size: 150px;
+	letter-spacing: 15.5px;
+	margin: 0px;
+	font-weight: 900;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.notfound h2 {
+	font-family: 'Raleway', sans-serif;
+	color: #292929;
+	font-size: 28px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 2.5px;
+	margin-top: 0;
+}
+
+.notfound p {
+	font-family: 'Raleway', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	margin-top: 0;
+	margin-bottom: 15px;
+	color: #333;
+}
+
+.notfound a {
+	font-family: 'Raleway', sans-serif;
+	font-size: 14px;
+	text-decoration: none;
+	text-transform: uppercase;
+	background: #fff;
+	display: inline-block;
+	padding: 15px 30px;
+	border-radius: 40px;
+	color: #292929;
+	font-weight: 700;
+	-webkit-box-shadow: 0px 4px 15px -5px rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 4px 15px -5px rgba(0, 0, 0, 0.3);
+	-webkit-transition: 0.2s all;
+	transition: 0.2s all;
+}
+
+.notfound a:hover {
+	color: #fff !important;
+	background-color: #00b5c3;
+}
+
+@media only screen and (max-width: 480px) {
+	.notfound {
+		text-align: center;
+	}
+
+	.notfound .notfound-404 {
+		position: relative;
+		width: 100%;
+		margin-bottom: 15px;
+	}
+
+	.notfound {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
 }

@@ -98,6 +98,8 @@
 					// if on a LearnDash course element...
 					?>
 
+					<!-- No display progress bar on search page -->
+					<?php if (!is_search()) : ?>
 					<div class="header-course-progress">
 
 						<?php 
@@ -127,6 +129,7 @@
 						?>
 
 					</div>
+					<?php endif; ?>
 
 				<?php // end LearnDash course element check
 				endif; 
