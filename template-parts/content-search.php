@@ -6,80 +6,30 @@
  *
  * @package rslfranchise
  */
+
 ?>
 
-<?php if (!empty($courses_by_category)) : ?>
+<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+	<header class="entry-header">
+		<?php the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
 
-		<!-- If category is only one> -->
-		<?php if (count($courses_by_category) == 1) : ?>
-			<div class="row">
-				<?php
-				foreach ($courses_by_category as $category_name => $post_ids) :
-					foreach ($post_ids as $post_id) :
-						$post = get_post($post_id);
-						if ($post) :
-							setup_postdata($post);
-							?>
-							<div class="col-md-6 col-lg-4">
-								<?php
-								get_template_part('template-parts/loop', 'sfwd-courses');
-								?>
-							</div>
-							<?php
-						endif;
-					endforeach;
-				endforeach;
-				wp_reset_postdata();
-				?>
-			</div>
-		<?php else : ?>
-    <!-- Nav Tabs -->
-    <ul class="nav nav-tabs text-center" id="search-tabs" role="tablist">
-        <?php 
-        $first = true; // To mark the first tab as active
-        foreach ($courses_by_category as $category_name => $post_ids) : 
-        ?>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link <?php echo $first ? 'active' : ''; ?>" id="<?php echo sanitize_title($category_name); ?>-tab" data-bs-toggle="tab" data-bs-target="#<?php echo sanitize_title($category_name); ?>" type="button" role="tab" aria-controls="<?php echo sanitize_title($category_name); ?>" aria-selected="<?php echo $first ? 'true' : 'false'; ?>">
-                    <?php echo esc_html($category_name); ?>
-                </button>
-            </li>
-        <?php 
-        $first = false; // Only the first tab should be active
-        endforeach; 
-        ?>
-    </ul>
-
-    <!-- Tab Content -->
-    <div class="tab-content" id="search-tab-content">
-        <?php 
-        $first = true; // Reset for tab content
-        foreach ($courses_by_category as $category_name => $post_ids) : 
-        ?>
-            <div class="tab-pane fade <?php echo $first ? 'show active' : ''; ?>" id="<?php echo sanitize_title($category_name); ?>" role="tabpanel" aria-labelledby="<?php echo sanitize_title($category_name); ?>-tab">
-							<div class="row">  
-								<?php 
-                foreach ($post_ids as $post_id) : 
-                    $post = get_post($post_id);
-                    if ($post) :
-                        setup_postdata($post);
-												?>
-												<div class="col-md-6 col-lg-4">
-													<?php
-														get_template_part('template-parts/loop', 'sfwd-courses'); 
-													?>
-												</div>
-												<?php
-                    endif;
-                endforeach; 
-                wp_reset_postdata();
-                ?>
-							</div>
-            </div>
-        <?php 
-        $first = false; 
-        endforeach; 
-        ?>
-    </div>
+		<?php if ( 'post' === get_post_type() ) : ?>
+		<div class="entry-meta">
+			<?php
+			rslfranchise_posted_on();
+			rslfranchise_posted_by();
+			?>
+		</div><!-- .entry-meta -->
 		<?php endif; ?>
-<?php endif; ?>
+	</header><!-- .entry-header -->
+
+	<?php rslfranchise_post_thumbnail(); ?>
+
+	<div class="entry-summary">
+		<?php the_excerpt(); ?>
+	</div><!-- .entry-summary -->
+
+	<footer class="entry-footer">
+		<?php rslfranchise_entry_footer(); ?>
+	</footer><!-- .entry-footer -->
+</article><!-- #post-<?php the_ID(); ?> -->
