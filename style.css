@@ -1041,12 +1041,17 @@ textarea {
 
 .nav-tabs .nav-link.active {
 	border-bottom: 4px solid #85d6de !important;
-	color: #737c85 !important;
+	color: #737c85;
 }
+
 
 .nav-tabs .nav-link:hover,
 .nav-tabs .nav-link:focus {
 	outline: 0;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+	color: white !important;
 }
 
 .tab-content {
