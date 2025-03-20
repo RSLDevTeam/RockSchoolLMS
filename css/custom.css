@@ -1382,6 +1382,57 @@ a.ld-primary-color.ld-course-step-back {
 }
 }
 
+.wavesurfer-time {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1em;
+    margin-top: 0.5em;
+}
+
+.wavesurfer-container {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: block;
+    position: relative;
+}
+
+.wavesurfer-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+label.wavesurfer-zoom {
+    display: flex;
+    align-items: center;
+}
+
+input[type="range"] {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    background: transparent;
+    cursor: pointer;
+    border: 0 !important;
+    height: 15px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    background: #ececec;
+    height: 15px;
+}
+
+input[type="range"]::-moz-range-track {
+    background: #ececec;
+    height: 15px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #4cadc2;
+    height: 15px;
+    width: 1rem;    
+}
 
 
 
