@@ -201,11 +201,6 @@ require get_template_directory() . '/inc/user-roles.php';
 require get_template_directory() . '/inc/learndash.php';
 
 /**
- * Wavesurfer.
- */
-require get_template_directory() . '/inc/wavesurfer-shortcode.php';
-
-/**
  * Block registration.
  */
 require get_template_directory() . '/inc/block-registration.php';

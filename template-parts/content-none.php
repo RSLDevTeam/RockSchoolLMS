@@ -11,7 +11,6 @@
 
 <section class="no-results not-found">
 	<header class="page-header">
-		<h1 class="page-title"><?php esc_html_e( 'Nothing Found', 'rslfranchise' ); ?></h1>
 	</header><!-- .page-header -->
 
 	<div class="page-content">
@@ -33,11 +32,18 @@
 
 		elseif ( is_search() ) :
 			?>
-
-			<p><?php esc_html_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'rslfranchise' ); ?></p>
+			<div class="container">
+				<section class="error-404 not-found">
+					<div id="notfound">
+						<div class="notfound">
+							<h2>Search not found</h2>
+							<p><?php esc_html_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'rslfranchise' ); ?></p>
+							<?php	get_search_form();?>
+						</div>
+					</div>
+				</section>
+			</div>
 			<?php
-			get_search_form();
-
 		else :
 			?>
 

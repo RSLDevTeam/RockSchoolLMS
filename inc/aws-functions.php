@@ -52,12 +52,12 @@ function aws_field_region_cb() {
 
 function aws_field_access_key_cb() {
     $options = get_option('aws_options');
-    echo '<input type="password" name="aws_options[access_key]" value="' . esc_attr($options['access_key'] ?? '') . '">';
+    echo '<input type="text" name="aws_options[access_key]" value="' . esc_attr($options['access_key'] ?? '') . '">';
 }
 
 function aws_field_secret_key_cb() {
     $options = get_option('aws_options');
-    echo '<input type="password" name="aws_options[secret_key]" value="' . esc_attr($options['secret_key'] ?? '') . '">';
+    echo '<input type="text" name="aws_options[secret_key]" value="' . esc_attr($options['secret_key'] ?? '') . '">';
 }
 
 function aws_settings_page_html() {
