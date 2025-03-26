@@ -21,3 +21,17 @@ function custom_enqueue_soundslice_block() {
 add_action('admin_enqueue_scripts', 'custom_enqueue_soundslice_block');
 // Load block registration
 require_once get_template_directory() . '/assets/blocks/soundslice.php';
+
+// wavesurfer block
+function custom_enqueue_wavesurfer_assets() {
+    wp_register_script(
+        'custom-wavesurfer-block',
+        get_stylesheet_directory_uri() . '/assets/blocks/wavesurfer.js',
+        array('wp-blocks', 'wp-element', 'wp-block-editor'),
+        filemtime(get_stylesheet_directory() . '/assets/blocks/wavesurfer.js'),
+        true
+    );
+}
+add_action('enqueue_block_editor_assets', 'custom_enqueue_wavesurfer_assets');
+// Load block registration
+require_once get_template_directory() . '/assets/blocks/wavesurfer.php';
