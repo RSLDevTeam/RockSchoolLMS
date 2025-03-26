@@ -76,18 +76,22 @@
 
 			<div class="header-right">
 
-				<a href="/cart/"><div class="cart-button">
+				<?php if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) : ?>
 
-					<?php 
-			        $cart_count = WC()->cart->cart_contents_count;
-			        if ( $cart_count > 0 ) : ?>
-			            <div class="cart-items-indicator open"><?php echo $cart_count; ?></div>
-			        <?php endif;
-			        ?>
+					<a href="/cart/"><div class="cart-button">
 
-					<div class="cart-icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></div>
+						<?php 
+				        $cart_count = WC()->cart->cart_contents_count;
+				        if ( $cart_count > 0 ) : ?>
+				            <div class="cart-items-indicator open"><?php echo $cart_count; ?></div>
+				        <?php endif;
+				        ?>
 
-				</div></a>
+						<div class="cart-icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></div>
+
+					</div></a>
+
+				<?php endif; ?>
 
 				<div class="header-profile">
 					<?php 
