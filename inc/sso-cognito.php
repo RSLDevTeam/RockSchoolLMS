@@ -70,16 +70,35 @@ function handle_cognito_login_callback() {
 
             // Map Cognito custom:user_type to WordPress role
             $user_type = $user_info['custom:user_role'] ?? '';
-
+            //wp_die('Cognito Login Failed: ' . print_r($user_type, true));
             switch ($user_type) {
+                
                 case 'instructor':
                     $role = 'instructor';
+                    break;
+                case 'parent':
+                    $role = 'parent';
+                    break;
+                case 'learner':
+                    $role = 'learner';
+                    break;
+                case 'group_leader':
+                    $role = 'group_leader';
+                    break;
+                case 'contributor':
+                    $role = 'contributor';
+                    break;
+                case 'editor':
+                    $role = 'editor';
+                    break;
+                case 'author':
+                    $role = 'author';
                     break;
                 case 'admin':
                     $role = 'administrator';
                     break;
                 default:
-                    $role = 'subscriber';
+                    $role = 'aubscriber';
                     break;
             }
 
