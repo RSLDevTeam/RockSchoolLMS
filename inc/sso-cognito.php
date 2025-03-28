@@ -70,7 +70,8 @@ function handle_cognito_login_callback() {
 
             // Map Cognito custom:user_type to WordPress role
             $user_type = $user_info['custom:user_role'] ?? '';
-            //wp_die('Cognito Login Failed: ' . print_r($user_type, true));
+            //user_type to lowercase
+            $user_type = strtolower($user_type);
             switch ($user_type) {
                 
                 case 'instructor':
@@ -94,7 +95,7 @@ function handle_cognito_login_callback() {
                 case 'author':
                     $role = 'author';
                     break;
-                case 'admin':
+                case 'admin' || 'administrator':
                     $role = 'administrator';
                     break;
                 default:
