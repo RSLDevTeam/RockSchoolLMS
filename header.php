@@ -74,14 +74,39 @@
 
 			</nav><!-- #site-navigation -->
 
-			<div class="header-profile">
-				<?php 
-				$current_user = wp_get_current_user();
-				$profile_avatar = get_avatar(get_current_user_id(), 50); 
-				?>
-				<div class="header-name"><?php echo $current_user->user_firstname; ?></div>
-				<div class="header-avatar"><?php echo $profile_avatar; ?></div>
-				<!-- <div class="viewing-as"><?php _e('Viewing as', 'rslfranchise'); ?></div>	 -->
+			<div class="header-right">
+
+				<?php if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) : ?>
+
+					<a href="/cart/"><div class="cart-button">
+
+						<?php 
+				        $cart_count = WC()->cart->cart_contents_count;
+				        if ( $cart_count > 0 ) : ?>
+				            <div class="cart-items-indicator open"><?php echo $cart_count; ?></div>
+				        <?php endif;
+				        ?>
+
+						<div class="cart-icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></div>
+
+					</div></a>
+
+				<?php endif; ?>
+
+				<a href="/account/">
+
+					<div class="header-profile">
+						<?php 
+						$current_user = wp_get_current_user();
+						$profile_avatar = get_avatar(get_current_user_id(), 50); 
+						?>
+						<div class="header-name"><?php echo $current_user->user_firstname; ?></div>
+						<div class="header-avatar"><?php echo $profile_avatar; ?></div>
+						<!-- <div class="viewing-as"><?php _e('Viewing as', 'rslfranchise'); ?></div>	 -->
+					</div>
+
+				</a>
+
 			</div>
 
 		</header><!-- #masthead -->

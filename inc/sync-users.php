@@ -58,7 +58,7 @@ function sync_user_to_cognito($user_id) {
                     'UserPoolId'     => $userPoolId,
                     'Username'       => $username,
                     'UserAttributes' => $attributes,
-                    'MessageAction'  => 'SUPPRESS',
+                    //'MessageAction'  => 'SUPPRESS', //For Welocming user email
                 ]);
             } catch (AwsException $e) {
                 error_log('Cognito Create Error: ' . $e->getMessage());
