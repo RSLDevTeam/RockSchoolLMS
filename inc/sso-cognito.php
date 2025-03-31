@@ -99,7 +99,7 @@ function handle_cognito_login_callback() {
                     $role = 'administrator';
                     break;
                 default:
-                    $role = 'aubscriber';
+                    $role = 'subscriber';
                     break;
             }
 

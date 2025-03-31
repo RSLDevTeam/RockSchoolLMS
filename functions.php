@@ -250,3 +250,7 @@ require get_template_directory() . '/inc/sso-cognito.php';
  */
 require get_template_directory() . '/inc/bbpress.php';
 
+/**
+ * Sync users to cognito functions.
+ */
+require get_template_directory() . '/inc/sync-users.php';
