@@ -1508,6 +1508,16 @@ ul.nav {
     font-size: 1.5em;
 }
 
+.header-profile {
+    color: initial;
+}
+
+.image-holder {
+    position: relative;
+    overflow: hidden;
+}
+
+
 
 
 

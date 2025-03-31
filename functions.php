@@ -186,14 +186,6 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 }
 
 /**
- * Woocommerce functions.
- */
-if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-    require get_template_directory() . '/inc/woocommerce.php';
-}
-
-
-/**
  * Composer autoload.
  */
 require get_template_directory() . '/vendor/autoload.php';
@@ -239,6 +231,16 @@ require get_template_directory() . '/inc/aws-functions.php';
 require get_template_directory() . '/inc/aws-shortcode.php';
 
 /**
+ * Woocommerce functions.
+ */
+if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+    require get_template_directory() . '/inc/woocommerce.php';
+}
+add_action( 'after_setup_theme', function() {
+    add_theme_support( 'woocommerce' );
+});
+
+/**
  * LearnDash functions.
  */
 require get_template_directory() . '/inc/dev.php';
@@ -252,3 +254,14 @@ require get_template_directory() . '/inc/snippets.php';
  * Search Webhook functions.
  */
 require get_template_directory() . '/inc/search-webhook.php';
+
+/**
+ * SSO Cognito functions.
+ */
+require get_template_directory() . '/inc/sso-cognito.php';
+
+/**
+ * Custom bbPress functions.
+ */
+require get_template_directory() . '/inc/bbpress.php';
+
