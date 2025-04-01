@@ -152,9 +152,9 @@
             "append": ""
         },
         {
-            "key": "field_67d03a1d8b549",
-            "label": "AES Key",
-            "name": "aes_key",
+            "key": "field_67d03a3c8b54a",
+            "label": "Aes Iv",
+            "name": "aes_iv",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -173,9 +173,9 @@
             "append": ""
         },
         {
-            "key": "field_67d03a3c8b54a",
-            "label": "Aes Iv",
-            "name": "aes_iv",
+            "key": "field_67d03a1d8b549",
+            "label": "AES Key",
+            "name": "aes_key",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -236,6 +236,48 @@
             "key": "field_67e3c440dc02d",
             "label": "Client Secret",
             "name": "client_secret",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_67ebe6c056d88",
+            "label": "AWS Region",
+            "name": "aws_region",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_67ebe89773a00",
+            "label": "AWS User Pool ID",
+            "name": "aws_user_pool_id",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -374,5 +416,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1743425000
+    "modified": 1743513799
 }
