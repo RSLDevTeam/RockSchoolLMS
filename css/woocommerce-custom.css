@@ -70,13 +70,13 @@ ul.tabs.wc-tabs {
     color: inherit !important;
 }
 
-.woocommerce #content div.product div.images, 
-.woocommerce div.product div.images, 
-.woocommerce-page #content div.product div.images, 
+.woocommerce #content div.product div.images,
+.woocommerce div.product div.images,
+.woocommerce-page #content div.product div.images,
 .woocommerce-page div.product div.images,
-.woocommerce #content div.product div.summary, 
-.woocommerce div.product div.summary, 
-.woocommerce-page #content div.product div.summary, 
+.woocommerce #content div.product div.summary,
+.woocommerce div.product div.summary,
+.woocommerce-page #content div.product div.summary,
 .woocommerce-page div.product div.summary {
     width: 100%;
     float: none;
@@ -94,7 +94,7 @@ ul.tabs.wc-tabs {
     display: none;
 }
 
-.editor-styles-wrapper table.wc-block-cart-items .wc-block-cart-items__header, 
+.editor-styles-wrapper table.wc-block-cart-items .wc-block-cart-items__header,
 table.wc-block-cart-items .wc-block-cart-items__header {
     text-transform: none !important;
     font-size: 0.8em !important;
@@ -155,14 +155,3 @@ p.wc-block-components-checkout-order-summary__title-text {
 .widget_rsl_wc_category_filter h3 {
     font-size: initial;
 }
-
-
-
-
-
-
-
-
-
-
-
