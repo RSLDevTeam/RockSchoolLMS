@@ -93,15 +93,19 @@
 
 				<?php endif; ?>
 
-				<div class="header-profile">
-					<?php 
-					$current_user = wp_get_current_user();
-					$profile_avatar = get_avatar(get_current_user_id(), 50); 
-					?>
-					<div class="header-name"><?php echo $current_user->user_firstname; ?></div>
-					<div class="header-avatar"><?php echo $profile_avatar; ?></div>
-					<!-- <div class="viewing-as"><?php _e('Viewing as', 'rslfranchise'); ?></div>	 -->
-				</div>
+				<a href="/account/">
+
+					<div class="header-profile">
+						<?php 
+						$current_user = wp_get_current_user();
+						$profile_avatar = get_avatar(get_current_user_id(), 50); 
+						?>
+						<div class="header-name"><?php echo $current_user->user_firstname; ?></div>
+						<div class="header-avatar"><?php echo $profile_avatar; ?></div>
+						<!-- <div class="viewing-as"><?php _e('Viewing as', 'rslfranchise'); ?></div>	 -->
+					</div>
+
+				</a>
 
 			</div>
 
