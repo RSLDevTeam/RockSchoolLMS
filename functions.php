@@ -186,14 +186,6 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 }
 
 /**
- * Woocommerce functions.
- */
-if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-    require get_template_directory() . '/inc/woocommerce.php';
-}
-
-
-/**
  * Composer autoload.
  */
 require get_template_directory() . '/vendor/autoload.php';
