@@ -90,12 +90,12 @@ function get_user_address($user_id) {
 
     // Format address into a single string
     $billing_address = trim("$billing_address_1 $billing_address_2, $billing_city, $billing_postcode, $billing_country");
+    $billing_street_address = trim("$billing_address_1 $billing_address_2");
 
 
     $address = [
           "formatted"        => $billing_address,
-          "street_address"   => $billing_address_1,
-          "extended_address" => $billing_address_2,
+          "street_address"   => $billing_street_address,
           "locality"         => $billing_city,
           "region"           => $billing_state,
           "postal_code"      => $billing_postcode,
