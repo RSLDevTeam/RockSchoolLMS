@@ -85,10 +85,10 @@ $replies = get_posts(array(
               </div>
             </div>
         </div>
-        <div class="container mt-4">
-            <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">Topic: <?php echo esc_html($topic_title); ?></h5>
+        <div class="mt-4">
+            <div class="dashboard-section">
+                <div class="card-header">
+                    <h3>Topic: <?php echo esc_html($topic_title); ?></h3s>
                 </div>
                 <div class="card-body">
                     <p class="text-muted">Started by: <?php echo esc_html($topic_author); ?> on <?php echo esc_html($topic_date); ?></p>
@@ -99,9 +99,9 @@ $replies = get_posts(array(
             </div>
 
             <!-- Replies Section -->
-            <div class="card mt-4">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Replies (<?php echo esc_html($reply_count); ?>)</h5>
+            <div class="dashboard-section">
+                <div class="card-header">
+                    <h>Replies (<?php echo esc_html($reply_count); ?>)</h3>
                 </div>
                 <div class="card-body">
                     <?php if (!empty($replies)) : ?>
@@ -124,9 +124,9 @@ $replies = get_posts(array(
 
             <!-- Reply Form -->
             <?php if (is_user_logged_in()) : ?>
-                <div class="card mt-4">
-                    <div class="card-header bg-secondary text-white">
-                        <h5 class="mb-0">Post a Reply</h5>
+                <div class="dashboard-section mt-4">
+                    <div class="card-header ">
+                        <h3>Post a Reply</h3>
                     </div>
                     <div class="card-body">
                         <form id="new-reply" name="new-reply" method="post" action="<?php the_permalink(); ?>" class="needs-validation" novalidate>
