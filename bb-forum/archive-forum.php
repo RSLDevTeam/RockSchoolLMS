@@ -56,17 +56,21 @@ endif;
                     <section class="dashboard-section">
                         <h3><?php _e('Forum Statistics', 'rslfranchise'); ?></h3>
                         <ul class="list-group forum-stats">
-                            <li class="list-group-item"><strong>Forums:</strong> 
-                                <?php echo $totol_forums; ?>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div><strong>Forums</strong></div>
+                                <div class="list-numbers"><?php echo $totol_forums; ?></div>
                             </li>
-                            <li class="list-group-item"><strong>Topics:</strong> 
-                                <?php echo $total_topics; ?>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div><strong>Topics</strong></div>
+                                <div class="list-numbers"><?php echo $total_topics; ?></div>
                             </li>
-                            <li class="list-group-item"><strong>Replies:</strong> 
-                                <?php echo $total_replies; ?>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div><strong>Replies</strong></div>
+                                <div class="list-numbers"><?php echo $total_replies; ?></div>
                             </li>
-                            <li class="list-group-item"><strong>Users:</strong> 
-                                <?php echo function_exists('bbp_get_total_users') ? bbp_get_total_users() : 'N/A'; ?>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div><strong>Users</strong></div>
+                                <div class="list-numbers"><?php echo function_exists('bbp_get_total_users') ? bbp_get_total_users() : 'N/A'; ?></div>
                             </li>
                         </ul>
                     </section>
@@ -168,7 +172,7 @@ function display_forums($forums) {
         $latest_topic_author = ($latest_topic_id) ? get_the_author_meta('display_name', get_post_field('post_author', $latest_topic_id)) : __('Unknown', 'rslfranchise');
         ?>
 
-        <div class="card mb-3 shadow-sm">
+        <div class="dashboard-section">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <img src="<?php echo esc_url(get_avatar_url(get_post_field('post_author', $latest_topic_id), ['size' => 40])); ?>" class="rounded-circle me-3" width="40" height="40" alt="User Avatar">

@@ -1179,6 +1179,15 @@ textarea {
 	margin: 0;
 }
 
+.forum-stats .list-group-item {
+	border: none;
+	border-bottom: 1px solid #ececec;
+}
+
+.forum-stats .list-group-item:last-child {
+	border: none;
+}
+
 .stat-box {
 	display: flex;
 	align-items: center;
@@ -1205,6 +1214,11 @@ textarea {
 
 .topics {
 	background-color: #1d84b5;
+}
+
+.list-numbers {
+	font-weight: 600;
+	color: #4cadc2;
 }
 
 .replies {
