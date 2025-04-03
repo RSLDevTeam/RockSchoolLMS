@@ -1182,10 +1182,16 @@ textarea {
 .forum-stats .list-group-item {
 	border: none;
 	border-bottom: 1px solid #ececec;
+	padding-left: 0;
+	padding-right: 0;
 }
 
 .forum-stats .list-group-item:last-child {
 	border: none;
+}
+
+.table tr:last-child {
+	border-color: transparent;
 }
 
 .stat-box {
@@ -1197,8 +1203,8 @@ textarea {
 }
 
 .stat-icon {
-	width: 80px;
-	height: 80px;
+	width: 65px;
+	height: 65px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1206,23 +1212,12 @@ textarea {
 	color: #ffffff;
 	border-radius: 50%;
 	margin-bottom: 10px;
-}
-
-.posts {
-	background-color: #364253;
-}
-
-.topics {
 	background-color: #1d84b5;
 }
 
 .list-numbers {
 	font-weight: 600;
 	color: #4cadc2;
-}
-
-.replies {
-	background-color: #ff5a5f;
 }
 
 .stat-number {
@@ -1234,4 +1229,12 @@ textarea {
 	font-size: 1rem;
 	color: #555;
 	text-transform: uppercase;
+}
+
+.bb_form_labler {
+	margin-top: 0.7rem;
+}
+
+.bbp-the-content {
+	width: 100% !important;
 }
