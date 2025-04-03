@@ -68,42 +68,49 @@ function handle_cognito_login_callback() {
                 $user = get_user_by('id', $user_id);
             }
 
-            // Map Cognito custom:user_type to WordPress role
+            // Map Cognito custom:user_type to WordPress role if not exis
             $user_type = $user_info['custom:user_role'] ?? '';
             //user_type to lowercase
             $user_type = strtolower($user_type);
-            switch ($user_type) {
-                
-                case 'instructor':
-                    $role = 'instructor';
-                    break;
-                case 'parent':
-                    $role = 'parent';
-                    break;
-                case 'learner':
-                    $role = 'learner';
-                    break;
-                case 'group_leader':
-                    $role = 'group_leader';
-                    break;
-                case 'contributor':
-                    $role = 'contributor';
-                    break;
-                case 'editor':
-                    $role = 'editor';
-                    break;
-                case 'author':
-                    $role = 'author';
-                    break;
-                case 'admin' || 'administrator':
-                    $role = 'administrator';
-                    break;
-                default:
-                    $role = 'subscriber';
-                    break;
-            }
 
-            $user->set_role($role);
+            if($user_type) {
+                switch ($user_type) {
+                
+                    case 'instructor':
+                        $role = 'instructor';
+                        break;
+                    case 'parent':
+                        $role = 'parent';
+                        break;
+                    case 'learner':
+                        $role = 'learner';
+                        break;
+                    case 'group_leader':
+                        $role = 'group_leader';
+                        break;
+                    case 'contributor':
+                        $role = 'contributor';
+                        break;
+                    case 'editor':
+                        $role = 'editor';
+                        break;
+                    case 'author':
+                        $role = 'author';
+                        break;
+                    case 'admin' || 'administrator':
+                        $role = 'administrator';
+                        break;
+                    case 'subscriber':
+                        $role = 'subscriber';
+                        break;
+                    default:
+                        $role = 'learner';
+                        break;
+                }
+    
+                $user->set_role($role);
+            }
+            
 
             // Log the user in
             wp_set_current_user($user->ID);

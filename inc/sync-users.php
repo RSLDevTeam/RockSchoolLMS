@@ -10,6 +10,9 @@ use Aws\Exception\AwsException;
 
 define('SDK_ACCESS_KEY', get_field('access_key', 'option')?: '');
 define('SDK_SECRET_KEY', get_field('secret_key', 'option')?: '');
+define('AWS_REGION', get_field('aws_region', 'option')?: '');
+define('AWS_USER_POOL_ID', get_field('aws_user_pool_id', 'option')?: '');
+
  
 add_action('user_register', 'sync_user_to_cognito', 10, 1);
 add_action('profile_update', 'sync_user_to_cognito', 10, 2);
@@ -23,9 +26,11 @@ function sync_user_to_cognito($user_id) {
     
     $client_id = SDK_ACCESS_KEY;
     $client_secret = SDK_SECRET_KEY;
+    $aws_region = AWS_REGION;
+    $user_pool_id = AWS_USER_POOL_ID;
     
     $cognitoClient = new CognitoIdentityProviderClient([
-        'region' => 'eu-west-2',
+        'region' => $aws_region,
         'version' => '2016-04-18',
         'credentials' => [
             'key'    => $client_id,
@@ -33,7 +38,6 @@ function sync_user_to_cognito($user_id) {
         ],
     ]);
  
-    $userPoolId = 'eu-west-2_MjoR6V3RL';
     $username   = $user->user_login;
     $userPhone  = get_user_meta($user_id, 'billing_phone', true) ?? "";
     $userAddress = get_user_address($user_id);
@@ -51,7 +55,7 @@ function sync_user_to_cognito($user_id) {
     try {
         // Attempt to update first
         $cognitoClient->adminUpdateUserAttributes([
-            'UserPoolId'     => $userPoolId,
+            'UserPoolId'     => $user_pool_id,
             'Username'       => $username,
             'UserAttributes' => $attributes,
         ]);
@@ -59,7 +63,7 @@ function sync_user_to_cognito($user_id) {
         if ($e->getAwsErrorCode() === 'UserNotFoundException') {
             try {
                 $cognitoClient->adminCreateUser([
-                    'UserPoolId'     => $userPoolId,
+                    'UserPoolId'     => $user_pool_id,
                     'Username'       => $username,
                     'UserAttributes' => $attributes,
                     //'MessageAction'  => 'SUPPRESS', //For Welocming user email
