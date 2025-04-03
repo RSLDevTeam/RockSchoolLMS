@@ -33,7 +33,7 @@ function handle_course_access(WP_REST_Request $request) {
     if (!$params || !isset($params['courses'])) {
         return new WP_Error('invalid_params', 'Missing or invalid parameters', ['status' => 400]);
     }
-    $cousres = $params['courses'];
+    $courses = $params['courses'];
 
     if (!function_exists('ld_update_course_access')) {
         return new WP_Error('learndash_missing', 'LearnDash plugin is not active', ['status' => 500]);
@@ -51,41 +51,53 @@ function handle_course_access(WP_REST_Request $request) {
     $user           = get_user_by('email', $response['email']);    
     $acf_user_id    = 'user_' . $user->ID;
     $linked_learners= get_field('linked_learners', 'user_' . $user->ID);
-    
     if (!$linked_learners) return new WP_Error('check', 'No child learners associated', ['status' => 201]);
     
     $linked_learners_ids = array_map(fn($learner) => $learner['ID'], $linked_learners);
     array_push($linked_learners_ids, $user->ID); //save user it self to linked in learners to check access
     
-    //invalid course ids
+    //invalid course & learner ids
     $invalid_course_ids = [];
     $invalid_linked_learners_ids = [];
+    $invalid_access_course = [];
     //forech courses to update access
-    foreach ($cousres as $course) {
+    foreach ($courses as $course) {
         $course_id = $course['course_id'];
-        //if course accessable_user_id is in linked_learners_ids then update access
-        if (in_array($course['accessable_user_id'], $linked_learners_ids) || in_array($course['purchased_user_id'], $linked_learners)) {
+        $accessable_user_id = $course['accessable_user_id'];
+        $purchased_user_id = $course['purchased_user_id'];
+        $revoke_access = $course['revoke_access'];
 
-            // Check if the course is existing in learndash 
-            if (!get_post_status($course_id)) {
-                $invalid_course_ids[] = $course_id;
-                continue; // Skip to the next course
+        // Check if the accessible user or the purchased user is in the linked learners
+        $is_accessable_user_valid = in_array($accessable_user_id, $linked_learners_ids);
+        $is_purchased_user_valid = in_array($purchased_user_id, $linked_learners_ids);
+
+        // Check if either of the conditions for user validity is not met
+        if (!$is_accessable_user_valid || !$is_purchased_user_valid) {
+            if (!$is_accessable_user_valid) {
+                $invalid_linked_learners_ids[] = $accessable_user_id;
             }
-            // // Check if the course is already assigned to the user
-            // $course_user = learndash_get_users_for_course($course_id, $course['accessable_user_id']);
-            
-            // ld_update_course_access($course['accessable_user_id'], $course_id, $course['revoke_access']);
-        }else {
-            if (!in_array($course['accessable_user_id'], $linked_learners_ids)) {
-                $invalid_linked_learners_ids[] = $course['accessable_user_id'];
-            }elseif (!in_array($course['purchased_user_id'], $linked_learners)) {
-                $invalid_linked_learners_ids[] = $course['purchased_user_id'];
+            if (!$is_purchased_user_valid) {
+                $invalid_linked_learners_ids[] = $purchased_user_id;
             }
+            continue; // Skip to the next course
+        }
+
+        // Validate the course existence in LearnDash
+        if (!is_valid_learndash_course($course_id)) {
+            $invalid_course_ids[] = $course_id;
+            continue; // Skip to the next course
+        }
+
+        // Update course access if all checks are valid
+        $is_updated_course =  update_course_access($course);
+        
+        if (!$is_updated_course) {
+            $invalid_access_course[] = $course_id;
             continue; // Skip to the next course
         }
     }
     // If there are invalid course IDs, return them
-    if (!empty($invalid_course_ids) || !empty($invalid_linked_learners_ids)) {
+    if (!empty($invalid_course_ids) || !empty($invalid_linked_learners_ids) || !empty($invalid_access_course)) {
         $invalid_course_ids = array_unique($invalid_course_ids);
         $invalid_linked_learners_ids = array_unique($invalid_linked_learners_ids);
         $message_parts = [];
@@ -96,6 +108,9 @@ function handle_course_access(WP_REST_Request $request) {
         if (!empty($invalid_linked_learners_ids)) {
             $message_parts[] = 'Invalid learner IDs: ' . implode(', ', $invalid_linked_learners_ids);
         }
+        if (!empty($invalid_access_course)) {
+            $message_parts[] = 'Invalid access course IDs: ' . implode(', ', $invalid_access_course);
+        }
 
         return new WP_Error(
             'invalid_courses_or_learners',
@@ -104,7 +119,7 @@ function handle_course_access(WP_REST_Request $request) {
         );
     }
     return new WP_REST_Response([
-        'message' => "User {$user->ID} has been updated to courses"
+        'message' => "User has been updated to courses"
     ], 200);
 }
 
@@ -149,4 +164,39 @@ function validate_user_role($email, $role) {
         return new WP_Error('invalid_role', 'User does not have the required role', ['status' => 403]);
     }
 
+}
+
+function is_valid_learndash_course($course_id) {
+    $post = get_post($course_id);
+    if (!$post || 'sfwd-courses' !== $post->post_type) {
+        return false;
+    }
+    return true;
+}
+
+function update_course_access($course_request) {
+    $course_id = $course_request['course_id'];
+    $accessable_user_id = $course_request['accessable_user_id'];
+    $purchased_user_id = $course_request['purchased_user_id'];
+    $revoke_access = $course_request['revoke_access'];
+    try {
+        //check learndash course exists to the users
+        $accessable_user_courses = learndash_get_user_course_access_list($accessable_user_id);
+        if($revoke_access) {
+            if(!in_array($course_id, $accessable_user_courses)) {
+                return false;
+            }
+            ld_update_course_access($accessable_user_id, $course_id, true); //unenrolled child
+            ld_update_course_access($purchased_user_id, $course_id, true); //enrolled parent
+        }
+        
+        ld_update_course_access($accessable_user_id, $course_id, $false);
+        return true;
+    }catch (WP_Exception $e) {
+        return new WP_Error('accessable_user_courses3', $accessable_user_courses, ['status' => 401]);
+    } catch (Exception $e) {
+        // Catch general exceptions
+        return new WP_Error('accessable_user_courses4', $accessable_user_courses, ['status' => 401]);
+    }
+    
 }
