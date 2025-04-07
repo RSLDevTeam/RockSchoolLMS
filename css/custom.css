@@ -96,7 +96,7 @@ header#masthead {
     height: 64px;
     position: sticky !important;
     top: 0;
-    z-index: 6;
+    z-index: 10;
 }
 
 .admin-bar header#masthead {
@@ -1516,6 +1516,16 @@ ul.nav {
     position: relative;
     overflow: hidden;
 }
+
+.image-holder img {
+    width: 100%;
+}
+
+.bbp-breadcrumb {
+    display: none;
+}
+
+
 
 
 

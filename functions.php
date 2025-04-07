@@ -258,7 +258,7 @@ require get_template_directory() . '/inc/search-webhook.php';
 /**
  * SSO Cognito functions.
  */
-require get_template_directory() . '/inc/sso-cognito.php';
+// require get_template_directory() . '/inc/sso-cognito.php';
 
 /**
  * Custom bbPress functions.

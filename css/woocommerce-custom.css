@@ -152,11 +152,54 @@ p.wc-block-components-checkout-order-summary__title-text {
     transform: scale(1.02);
 }
 
-.widget_rsl_wc_category_filter h3 {
+.filter-section h3, .filter-section h4 {
     font-size: initial;
 }
 
+section.related.products ul.products {
+    margin-top: 2em;
+}
 
+section.related.products {
+    padding-top: 2em;
+    border-top: 1px solid #ececec;
+    margin-top: 2em;
+}
+
+.sold-out-badge {
+    width: 0;
+    height: 0;
+    border-top: 71px solid #4faec3;
+    border-left: 71px solid transparent;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.sold-out-badge-inner {
+    color: #fff;
+    position: absolute;
+    right: 13px;
+    top: -65px;
+    text-align: center;
+    font-size: .65em !important;
+    font-weight: 600;
+}
+
+span.price span {
+    font-weight: 600;
+}
+
+.woocommerce-product-gallery__wrapper {
+    position: relative;
+}
+
+.woocommerce span.onsale {
+    background: #fa0303;
+    font-size: .65em !important;
+    font-weight: 600;
+}
 
 
 

@@ -1065,7 +1065,8 @@ textarea {
 	border-bottom: 1px solid #ecf0f1;
 }
 
-#search-tabs {
+#search-tabs,
+#forumTabs {
 	margin: 0;
 }
 
@@ -1171,4 +1172,73 @@ textarea {
 		padding-left: 15px;
 		padding-right: 15px;
 	}
+}
+
+/** Forum Styling */
+.forum-stats {
+	margin: 0;
+}
+
+.forum-stats .list-group-item {
+	border: none;
+	border-bottom: 1px solid #ececec;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.forum-stats .list-group-item:last-child {
+	border: none;
+}
+
+.table tr:last-child {
+	border-color: transparent;
+}
+
+.stat-box {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
+}
+
+.stat-icon {
+	width: 65px;
+	height: 65px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 30px;
+	color: #ffffff;
+	border-radius: 50%;
+	margin-bottom: 10px;
+	background-color: #1d84b5;
+}
+
+.list-numbers {
+	font-weight: 600;
+	color: #4cadc2;
+}
+
+.stat-number {
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+.stat-title {
+	font-size: 1rem;
+	color: #555;
+	text-transform: uppercase;
+}
+
+.bb_form_labler {
+	margin-top: 0.7rem;
+}
+
+.bbp-the-content {
+	width: 100% !important;
+}
+
+button:hover span span a {
+	color: white !important;
 }
