@@ -64,12 +64,17 @@ function move_product_title_to_top() {
 }
 add_action('woocommerce_before_single_product', 'move_product_title_to_top');
 
-// move decription on PDP
-function move_product_excerpt_to_bottom() {
+// move decriptions and related on PDP
+function move_pdp_elements() {
+
     remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs');
+    remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20);
+
     add_action('woocommerce_after_add_to_cart_form', 'woocommerce_output_product_data_tabs', 10);
+    add_action('woocommerce_after_single_product', 'woocommerce_output_related_products', 10);
+
 }
-add_action('woocommerce_before_single_product', 'move_product_excerpt_to_bottom');
+add_action('woocommerce_before_single_product', 'move_pdp_elements');
 
 // move meta
 function move_product_meta_below_title() {
@@ -130,7 +135,7 @@ function rsl_close_article_wrapper() {
 
 // thumbs in woo
 add_filter( 'single_product_archive_thumbnail_size', function( $size ) {
-    return 'full'; 
+    return 'book-small'; 
 });
 
 // procuct archive redux
@@ -200,7 +205,6 @@ function rsl_register_woocommerce_sidebar() {
 }
 add_action( 'widgets_init', 'rsl_register_woocommerce_sidebar' );
 
-// add sidebar to archives
 // Add sidebar to archives (only if sidebar has widgets)
 add_action( 'woocommerce_before_shop_loop', 'rsl_open_bootstrap_row_and_sidebar', 5 );
 add_action( 'woocommerce_before_shop_loop', 'rsl_open_bootstrap_main_col', 6 );
@@ -213,7 +217,7 @@ function rsl_open_bootstrap_row_and_sidebar() {
 
             // Sidebar
             echo '<aside class="col-lg-3">';
-            echo '<div class="dashboard-section">';
+            echo '<div class="dashboard-section filter-section">';
             dynamic_sidebar( 'woocommerce_sidebar' );
             echo '</div>';
             echo '</aside>';
@@ -295,3 +299,45 @@ function rsl_register_wc_category_filter_widget() {
     register_widget( 'RSL_WC_Category_Filter_Widget' );
 }
 add_action( 'widgets_init', 'rsl_register_wc_category_filter_widget' );
+
+// sold out notice
+function add_sold_out_badge() {
+    global $product;
+    if ( ! $product->is_in_stock() ) {
+        echo '<div class="sold-out-badge"><div class="sold-out-badge-inner">' . esc_html__( 'Sold Out', 'rslfranchise' ) . '</div></div>';
+    }
+}
+add_action( 'woocommerce_before_shop_loop_item_title', 'add_sold_out_badge', 10 ); 
+
+// Woocommerce emails
+add_action('init', function () {
+    // Remove WooCommerce default email header and footer
+    remove_action('woocommerce_email_header', 'woocommerce_email_header', 10);
+    remove_action('woocommerce_email_footer', 'woocommerce_email_footer', 10);
+});
+add_filter('woocommerce_email_styles', '__return_empty_string');
+
+
+// button in emails
+add_action('woocommerce_email_after_order_table', 'add_course_access_link_to_all_emails', 10, 4);
+
+function add_course_access_link_to_all_emails($order, $sent_to_admin, $plain_text, $email) {
+    // Ensure we add the content after the order details in all customer emails
+    if ($sent_to_admin) {
+        return; // Skip admin emails
+    }
+
+    // Define the translated text for the button and link
+    $login_text = __('Login to access course materials at:', 'your-text-domain');
+    $button_text = __('Rockschool Backstage', 'your-text-domain');
+
+    // Get the site URL for the login link
+    $login_url = home_url('/');
+
+    // Output the HTML content with translated strings
+    echo '<p>' . esc_html($login_text) . '</p>';
+    echo '<p><a href="' . esc_url($login_url) . '" style="text-decoration:none;">';
+    echo '<button style="padding: 10px 20px; background-color: #26abe2; color: white; border: none; border-radius: 4px; cursor: pointer;">';
+    echo esc_html($button_text);
+    echo '</button></a></p>';
+}

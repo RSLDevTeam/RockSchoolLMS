@@ -258,7 +258,7 @@ require get_template_directory() . '/inc/search-webhook.php';
 /**
  * SSO Cognito functions.
  */
-require get_template_directory() . '/inc/sso-cognito.php';
+// require get_template_directory() . '/inc/sso-cognito.php';
 
 /**
  * Custom bbPress functions.
@@ -268,14 +268,14 @@ require get_template_directory() . '/inc/bbpress.php';
 /**
  * Sync users to cognito functions.
  */
-require get_template_directory() . '/inc/sync-users.php';
+// require get_template_directory() . '/inc/sync-users.php';
 
 /**
  * API to learndash courses access functions.
  */
-require get_template_directory() . '/apis/learndash-courses-access.php';
+// require get_template_directory() . '/apis/learndash-courses-access.php';
 
 /**
  * API to get user token functions.
  */
-require get_template_directory() . '/apis/get-cognito-token.php';
+// require get_template_directory() . '/apis/get-cognito-token.php';
