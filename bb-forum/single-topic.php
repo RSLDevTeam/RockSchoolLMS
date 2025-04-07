@@ -44,45 +44,18 @@ $replies = get_posts(array(
                 <h1 class="mb-0"><?php echo esc_html(get_the_title($topic_id)); ?></h1>
                 <span class="text-muted">Last updated on <?php echo esc_html($topic_date); ?></span>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <!-- Breadcrumb -->
-                <?php if (function_exists('bbp_breadcrumb')) : ?>
-                    <nav class="breadcrumb">
-                        <?php bbp_breadcrumb(array(
-                            'sep' => ' » ', // Separator between links
-                            'home_text' => 'Home', // Custom home text
-                        )); ?>
-                    </nav>
-                <?php endif; ?>
-              </div>
-              <div class="col-md-6">
+            <div class="d-flex justify-content-end">
                 <!-- Subscribe Button -->
                 <div class="">
-                  <span id="subscription-toggle">
-                      <a href="?action=<?php echo $subscribe_action; ?>&amp;object_id=<?php echo $topic_id; ?>&amp;object_type=post&amp;_wpnonce=<?php echo $subscribe_nonce; ?>"
-                          class="subscription-toggle"
-                          data-bbp-object-id="<?php echo $topic_id; ?>"
-                          data-bbp-object-type="post"
-                          data-bbp-nonce="<?php echo $subscribe_nonce; ?>"
-                          rel="nofollow">
-                          <?php echo $subscribe_text; ?>
-                      </a>
-                  </span>
+                    <button><?php echo bbp_get_topic_subscription_link( array(
+                            'before' => '',
+                            'after' => '',
+                        ) ); ?>
+                    </button>
 
                   <!-- Favorite/Unfavorite -->
-                  <span id="favorite-toggle">
-                      | <a href="?action=<?php echo $favorite_action; ?>&amp;object_id=<?php echo $topic_id; ?>&amp;_wpnonce=<?php echo $favorite_nonce; ?>"
-                          class="favorite-toggle"
-                          data-bbp-object-id="<?php echo $topic_id; ?>"
-                          data-bbp-object-type="post"
-                          data-bbp-nonce="<?php echo $favorite_nonce; ?>"
-                          rel="nofollow">
-                          <?php echo $favorite_text; ?>
-                      </a>
-                  </span>
+                  <button><?php bbp_topic_favorite_link(); ?></button>
                 </div>
-              </div>
             </div>
         </div>
         <div class="mt-4">

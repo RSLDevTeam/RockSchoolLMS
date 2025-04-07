@@ -1238,3 +1238,7 @@ textarea {
 .bbp-the-content {
 	width: 100% !important;
 }
+
+button:hover span span a {
+	color: white !important;
+}

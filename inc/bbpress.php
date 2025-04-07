@@ -75,3 +75,13 @@ if (isset($_POST['is_featured'])) {
 }
 }
 add_action('save_post', 'save_featured_forum_meta');
+
+
+//remove seperator function
+add_filter('bbp_before_subscription_link_parse_args', 'remove_subscription_separator');
+
+function remove_subscription_separator( $args ) {
+    $args['before'] = '';
+    $args['after']  = '';
+    return $args;
+}

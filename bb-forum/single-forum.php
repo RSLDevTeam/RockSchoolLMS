@@ -32,19 +32,19 @@ $last_active_user = get_userdata(get_post_field('post_author', $forum_id));
             <span class="text-muted">Last updated on <?php echo esc_html($last_active_time); ?></span>
         </div>
         <!-- Breadcrumb -->
-        <?php if (function_exists('bbp_breadcrumb')) : ?>
+        <!-- <?php if (function_exists('bbp_breadcrumb')) : ?>
             <nav class="breadcrumb">
                 <?php bbp_breadcrumb(array(
                     'sep' => ' » ', // Separator between links
                     'home_text' => 'Home', // Custom home text
                 )); ?>
             </nav>
-        <?php endif; ?>
+        <?php endif; ?> -->
 
         <!-- Subscribe Button -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <p class="text-muted">This forum has <?php echo esc_html($topic_count); ?> topic(s) and was last updated by <?php echo esc_html($last_active_user->display_name); ?>.</p>
-            <button>Subscribe</button>
+            <button><?php bbp_forum_subscription_link(); ?></button>
         </div>
 
         <div class="mt-5">
