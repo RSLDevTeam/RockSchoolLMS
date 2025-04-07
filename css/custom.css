@@ -78,7 +78,8 @@ section.sidebar-top {
 
 
 
-h1, h2 {
+h1,
+h2 {
     font-weight: 700;
 }
 
@@ -86,7 +87,8 @@ body {
     color: #323638;
 }
 
-header#masthead, footer#colophon {
+header#masthead,
+footer#colophon {
     background: #fff;
     padding: 0.5em 1em;
 }
@@ -103,7 +105,9 @@ header#masthead {
     top: 32px;
 }
 
-ul.nav-menu a, footer#colophon a, footer#colophon {
+ul.nav-menu a,
+footer#colophon a,
+footer#colophon {
     color: #fff !important;
 }
 
@@ -185,7 +189,7 @@ span.edit-link {
 }
 
 .learndash-wrapper:not(.ld-registration__outer-wrapper) .ld-button,
-.learndash-wrapper:not(.ld-registration__outer-wrapper) #learndash_mark_complete_button, 
+.learndash-wrapper:not(.ld-registration__outer-wrapper) #learndash_mark_complete_button,
 .learndash-wrapper:not(.ld-registration__outer-wrapper) .learndash_mark_complete_button {
     font-weight: 400 !important;
     border-radius: 7px !important;
@@ -239,9 +243,11 @@ header#masthead {
 .vertical-menu.vertical-menu-clicked {
     width: 55px;
 }
+
 .vertical-menu.vertical-menu-clicked ul {
     width: 55px;
 }
+
 .menu-clicked .main-container {
     margin-left: 55px;
 }
@@ -263,7 +269,7 @@ header#masthead {
 }
 
 .vertical-menu {
-    transition: width 0.2s ease; 
+    transition: width 0.2s ease;
     overflow: hidden;
 }
 
@@ -356,6 +362,7 @@ i.fa.fa-search.search-icon {
 .vertical-menu {
     height: calc(100vh - 64px);
 }
+
 .admin-bar .vertical-menu {
     height: calc(100vh - 96px);
 }
@@ -373,20 +380,22 @@ main article {
 }
 
 @media (min-width: 1175px) {
-.course-main {
-    display: flex;
-}
-.course-main header.entry-header {
-    margin-right: 2.5em;
-    position: sticky;
-    top: 5.6em;
-    height: fit-content;
-    width: 100%;
-    max-width: 364px;
-}
-admin-bar .course-main header.entry-header {
-    top: 2em;
-}
+    .course-main {
+        display: flex;
+    }
+
+    .course-main header.entry-header {
+        margin-right: 2.5em;
+        position: sticky;
+        top: 5.6em;
+        height: fit-content;
+        width: 100%;
+        max-width: 364px;
+    }
+
+    admin-bar .course-main header.entry-header {
+        top: 2em;
+    }
 }
 
 .box-shadow {
@@ -399,7 +408,7 @@ admin-bar .course-main header.entry-header {
 }
 
 .learndash-wrapper .ld-progress .ld-progress-bar .ld-progress-bar-percentage {
-        height: 12px !important;
+    height: 12px !important;
     background: rgb(242, 253, 255) !important;
     background: linear-gradient(90deg, rgba(207, 238, 245, 1) 0%, rgba(76, 173, 194, 1) 100%) !important;
 }
@@ -410,11 +419,13 @@ admin-bar .course-main header.entry-header {
     padding: 1em 1.2em !important;
 }
 
-.learndash-wrapper .ld-lesson-status, .learndash-wrapper .ld-topic-status {
+.learndash-wrapper .ld-lesson-status,
+.learndash-wrapper .ld-topic-status {
     background: #ffffff !important;
 }
 
-.learndash-wrapper .ld-item-list.ld-course-list .ld-lesson-section-heading, .learndash-wrapper .ld-item-list.ld-lesson-list .ld-lesson-section-heading {
+.learndash-wrapper .ld-item-list.ld-course-list .ld-lesson-section-heading,
+.learndash-wrapper .ld-item-list.ld-lesson-list .ld-lesson-section-heading {
     font-weight: 500 !important;
 }
 
@@ -525,7 +536,7 @@ admin-bar .course-main header.entry-header {
 }
 
 .main-container {
-    transition: margin-left 0.2s ease; 
+    transition: margin-left 0.2s ease;
 }
 
 .vertical-menu li .fa {
@@ -651,31 +662,37 @@ section.text_module.section-padding {
 }
 
 @media (max-width: 991px) {
-.ld-content-sidebar {
-    width: 100%;
-    position: relative;
-    max-height: 50px;
-    overflow: hidden;
-    transition: .5s ease-out;
-}
-.ld-content-sidebar-inner {
-    height: auto;
-}
-.ld-content-with-sidebar article {
-    margin-left: 0;
-}
-a.sidebar-back {
-    margin-top: 1em;
-}
-.ld-content-sidebar-nav-toggle {
-    display: block;
-}
-.ld-content-sidebar.ld-sidebar-open {
-    max-height: 900vh;
-}
-.ld-content-sidebar-nav-toggle {
-    text-align: right;
-}
+    .ld-content-sidebar {
+        width: 100%;
+        position: relative;
+        max-height: 50px;
+        overflow: hidden;
+        transition: .5s ease-out;
+    }
+
+    .ld-content-sidebar-inner {
+        height: auto;
+    }
+
+    .ld-content-with-sidebar article {
+        margin-left: 0;
+    }
+
+    a.sidebar-back {
+        margin-top: 1em;
+    }
+
+    .ld-content-sidebar-nav-toggle {
+        display: block;
+    }
+
+    .ld-content-sidebar.ld-sidebar-open {
+        max-height: 900vh;
+    }
+
+    .ld-content-sidebar-nav-toggle {
+        text-align: right;
+    }
 }
 
 section.learndash-group-flex-element,
@@ -736,9 +753,12 @@ section.dashboard-section h3 {
 
 .dashboard-section-link::after {
     font-family: 'FontAwesome';
-    content: '\f061'; /* Unicode for fa-arrow-right */
-    margin-left: 8px; /* Adjust spacing */
-    font-size: 14px; /* Adjust icon size if needed */
+    content: '\f061';
+    /* Unicode for fa-arrow-right */
+    margin-left: 8px;
+    /* Adjust spacing */
+    font-size: 14px;
+    /* Adjust icon size if needed */
     display: inline-block;
 }
 
@@ -937,7 +957,7 @@ a.sidebar-back {
     top: -11px;
 }
 
-.w-soundslice .ld-topic-status .ld-breadcrumbs, 
+.w-soundslice .ld-topic-status .ld-breadcrumbs,
 .w-soundslice .ld-topic-status .ld-progress {
     display: none !important;
 }
@@ -969,9 +989,9 @@ article.w-soundslice {
 }
 
 @media (min-width: 1440px) {
-.width-toggle {
-    display: block;
-}
+    .width-toggle {
+        display: block;
+    }
 }
 
 .w-soundslice h1.entry-title {
@@ -1064,7 +1084,7 @@ form.wpcf7-form .wpcf7-form-control-wrap input {
     width: 100%;
 }
 
-form.wpcf7-form .wpcf7-form-control-wrap input, 
+form.wpcf7-form .wpcf7-form-control-wrap input,
 form.wpcf7-form .wpcf7-form-control-wrap textarea {
     padding: 10px;
     border-radius: 0 !important;
@@ -1082,7 +1102,8 @@ textarea.wpcf7-form-control.wpcf7-textarea {
     margin-bottom: 0.5em;
 }
 
-.wpcf7-form p, .wpcf7-form label {
+.wpcf7-form p,
+.wpcf7-form label {
     margin-bottom: 0;
 }
 
@@ -1097,57 +1118,67 @@ input.wpcf7-submit {
 
 
 @media(max-width: 767px) {
-.mobile-menu-toggle {
-    display: block;
-}
-.menu-clicked .main-container,
-.main-container {
-    margin-left: 0;
-}
-.vertical-menu.vertical-menu-clicked {
-    width: 100%;
-    max-width: 100%;
-    display: none;
-}
-.vertical-menu {
-    width: 100%;
-    max-width: 100%;
-    position: absolute;
-    top: 0;
-    z-index: 5;
-    height: 100vh;
-    padding-top: 66px;
-    justify-content: flex-start;
-}
-.vertical-menu li span,
-.vertical-menu.vertical-menu-clicked li span {
-    display: inline-block;
-}
-.vertical-menu li {
-    width: 100vw;
-}
-.vertical-menu ul {
-    width: 100vw;
-}
-.header-search {
-    display: none;
-}
-main article {
-    padding: 1.5em 1em;
-}
-body.mobile-nav-open {
-    overflow-y: hidden;
-    height: 100%;
-}
-.mobile-nav-open main {
-    display: none;
-}
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .menu-clicked .main-container,
+    .main-container {
+        margin-left: 0;
+    }
+
+    .vertical-menu.vertical-menu-clicked {
+        width: 100%;
+        max-width: 100%;
+        display: none;
+    }
+
+    .vertical-menu {
+        width: 100%;
+        max-width: 100%;
+        position: absolute;
+        top: 0;
+        z-index: 5;
+        height: 100vh;
+        padding-top: 66px;
+        justify-content: flex-start;
+    }
+
+    .vertical-menu li span,
+    .vertical-menu.vertical-menu-clicked li span {
+        display: inline-block;
+    }
+
+    .vertical-menu li {
+        width: 100vw;
+    }
+
+    .vertical-menu ul {
+        width: 100vw;
+    }
+
+    .header-search {
+        display: none;
+    }
+
+    main article {
+        padding: 1.5em 1em;
+    }
+
+    body.mobile-nav-open {
+        overflow-y: hidden;
+        height: 100%;
+    }
+
+    .mobile-nav-open main {
+        display: none;
+    }
 }
 
 @media (max-width:600px) {
-a.linked-learner-email {
-    display: none;
-}
+    a.linked-learner-email {
+        display: none;
+    }
 }
 
 .not-logged-in .header-search,
@@ -1358,28 +1389,32 @@ form.create-homework label {
 }
 
 @media (max-width:767px) {
-.learndash-wrapper:not(.ld-registration__outer-wrapper) .ld-content-actions>* {
-    margin-bottom: 0 !important;
-}
-.ld-content-actions {
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
-}
+    .learndash-wrapper:not(.ld-registration__outer-wrapper) .ld-content-actions>* {
+        margin-bottom: 0 !important;
+    }
+
+    .ld-content-actions {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
 }
 
 @media (max-width: 640px) {
-a.ld-primary-color.ld-course-step-back {
-    font-size: 0.75em !important;
-}
-.learndash-wrapper:not(.ld-registration__outer-wrapper) .ld-content-actions {
-    flex-direction: row !important;
-}
-.learndash-wrapper:not(.ld-registration__outer-wrapper) .ld-content-actions div:nth-child(2) {
-    order: inherit !important;
-}
-.ld-content-action {
-    padding: 0 !important;
-}
+    a.ld-primary-color.ld-course-step-back {
+        font-size: 0.75em !important;
+    }
+
+    .learndash-wrapper:not(.ld-registration__outer-wrapper) .ld-content-actions {
+        flex-direction: row !important;
+    }
+
+    .learndash-wrapper:not(.ld-registration__outer-wrapper) .ld-content-actions div:nth-child(2) {
+        order: inherit !important;
+    }
+
+    .ld-content-action {
+        padding: 0 !important;
+    }
 }
 
 .wavesurfer-time {
@@ -1431,7 +1466,7 @@ input[type="range"]::-webkit-slider-thumb {
     appearance: none;
     background-color: #4cadc2;
     height: 15px;
-    width: 1rem;    
+    width: 1rem;
 }
 
 ul.nav {
@@ -1457,7 +1492,7 @@ ul.nav {
     bottom: 0;
 }
 
-.nav-tabs .nav-item.show .nav-link, 
+.nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link.active {
     border: 1px solid #ececec !important;
     border-radius: 6px 6px 0 0 !important;
@@ -1476,7 +1511,8 @@ ul.nav {
     display: none;
 }
 
-.learndash-wrapper:not(.ld-registration__outer-wrapper) #btn-join, .learndash-wrapper:not(.ld-registration__outer-wrapper) .btn-join {
+.learndash-wrapper:not(.ld-registration__outer-wrapper) #btn-join,
+.learndash-wrapper:not(.ld-registration__outer-wrapper) .btn-join {
     background-color: #4cadc2 !important;
     color: #fff !important;
     font-weight: 400 !important;
@@ -1511,7 +1547,6 @@ ul.nav {
 .header-profile {
     color: initial;
 }
-
 .image-holder {
     position: relative;
     overflow: hidden;
@@ -1524,11 +1559,3 @@ ul.nav {
 .bbp-breadcrumb {
     display: none;
 }
-
-
-
-
-
-
-
-
