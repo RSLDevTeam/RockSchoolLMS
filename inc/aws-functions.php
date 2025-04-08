@@ -84,12 +84,13 @@ add_action('wp_ajax_project_ajax_s3_file_upload', 'project_ajax_s3_file_upload_h
 
 // pre-signed view file URL
 function generate_presigned_view_url($file_key) {
-    $aws_options = get_option('aws_options');
-    $bucketName = $aws_options['bucket_name'];
-    $region = $aws_options['aws_region'];
-    $accessKey = $aws_options['access_key'];
-    $secretKey = $aws_options['secret_key'];
-    $endpoint = 'https://s3.' . $region . '.wasabisys.com'; 
+    $bucketName = get_field('bucket_name', 'option');
+    $keyName = 'homework/' . $homework_id . '/' . $fileName;
+    $region = get_field('wasabi_region', 'option');
+    $accessKey = get_field('wasabi_access_key', 'option');
+    $secretKey = get_field('wasabi_secret_key', 'option');
+    $endpointPath = get_field('endpoint', 'option');
+    $endpoint = 'https://' . $endpointPath;
 
     try {
         $s3Client = new Aws\S3\S3Client([
