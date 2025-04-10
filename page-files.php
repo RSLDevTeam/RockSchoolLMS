@@ -21,6 +21,9 @@ $rsl_folders_data = getUserWasabiFiles($fullDirectory);
 //Get User Root Directory
 $user_root_path = 'users/' . $current_user->ID;
 $user_folders_data = getUserWasabiFiles($user_root_path); 
+$linked_franchises = get_field('linked_franchises', 'user_' . $current_user->ID) ?: [];
+
+//wp_die('Linked franchises: ' . print_r($linked_franchises, true));
 // Get all folders for Quick Access
 $quick_access_folders = [
     ['folder' => 'Rockschool', 'path' => 'Rockschool'],
@@ -37,6 +40,14 @@ foreach ($user_folders_data['folders'] as $user_folder) {
     ];
 }
 
+// Add linked franchises to the quick access folders
+foreach ($linked_franchises as $franchise) {
+    $franchise_folder = 'franchises/' . $franchise->post_title;
+    $quick_access_folders[] = [
+        'folder' => $franchise->post_title,  // Display name of the franchise
+        'path' => $franchise_folder  // Full path to the franchise folder
+    ];
+}
 
 // Handle "Create Folder" request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
@@ -77,19 +88,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                             <?php                                 
                                 // Check if the current folder matches the folder in the loop
                                 $is_active = ($rawDirectory == $folder['path']) ? 'nav-active' : '';
+                                $is_franchise = (strpos($folder['path'], 'franchises/') !== false);
                             ?>
 
                             <li class="list-group-item nav-item <?= $is_active; ?>">
                                 <a class="nav-link" href="?folder=<?= urlencode($folder['path']) ?>">
-                                    <i class="fa fa-folder"></i> <?= htmlspecialchars($folder['folder']) ?>
+                                    <?php if ($is_franchise): ?>
+                                        <i class="fa fa-building"></i>
+                                    <?php else: ?>
+                                        <i class="fa fa-folder"></i>
+                                    <?php endif; ?>
+                                    <?= htmlspecialchars($folder['folder']) ?>
                                 </a>
                             </li>
                         <?php endforeach; ?>
-                        <li class="list-group-item nav-item">
-                            <a class="nav-link " href="#">
-                                <i class="fa fa-folder"></i>  Franchisee London
-                            </a>
-                        </li>
                     </ul>
                 </div>  
             </div>
