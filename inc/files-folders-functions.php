@@ -36,39 +36,39 @@ function getUserWasabiFiles($folder = 'Rockschool') {
         $folders = [];
         $files = [];
 
+        $folders = [];
+        $files = [];
+        
         // Loop through subfolders (CommonPrefixes)
         if (isset($result['CommonPrefixes'])) {
             foreach ($result['CommonPrefixes'] as $f) {
-                $folders[] = basename($f['Prefix']);
+                $folderName = basename($f['Prefix']);
+                $fullFolderPath = $f['Prefix'];  // Full path of the folder
+                $folders[] = [
+                    'name' => $folderName,
+                    'path' => $fullFolderPath
+                ];
             }
         }
-
+        
         // Loop through files (Contents)
         if (isset($result['Contents'])) {
             foreach ($result['Contents'] as $object) {
                 $fileName = basename($object['Key']);
+                $fullFilePath = $object['Key'];  // Full path of the file
                 if ($fileName && $object['Key'] !== $prefix) {
-                    $files[] = $fileName;
+                    $files[] = [
+                        'name' => $fileName,
+                        'path' => $fullFilePath
+                    ];
                 }
             }
         }
-
-        // Generate breadcrumbs
-        $breadcrumbs = [];
-        $parts = explode('/', trim($folder, '/'));
-        $path = '';
-        foreach ($parts as $part) {
-            $path .= $part . '/';
-            $breadcrumbs[] = [
-                'label' => $part,
-                'path' => $path
-            ];
-        }
+        
 
         return [
             'folders'    => $folders,
             'files'      => $files,
-            'breadcrumbs' => $breadcrumbs,
         ];
 
     } catch (Aws\Exception\AwsException $e) {
@@ -76,7 +76,6 @@ function getUserWasabiFiles($folder = 'Rockschool') {
         return [
             'folders'    => [],
             'files'      => [],
-            'breadcrumbs' => [],
             'error'      => $e->getMessage()
         ];
     }

@@ -12,20 +12,15 @@ wp_get_current_user();
 $rawDirectory = isset($_GET['folder']) ? urldecode($_GET['folder']) : 'Rockschool';
 
 // This is what the user clicked or sees
-$displayDirectory = $rawDirectory;
+$fullDirectory = $displayDirectory = $rawDirectory;
 
-// This is what we send to Wasabi
-if (strpos($rawDirectory, 'Rockschool') !== 0) {
-    $fullDirectory = 'users/' . $current_user->ID . '/' . ltrim($rawDirectory, '/');
-} else {
-    $fullDirectory = $rawDirectory;
-}
+$displayDirectory = basename($rawDirectory);
+
 $rsl_folders_data = getUserWasabiFiles($fullDirectory);
 
 //Get User Root Directory
 $user_root_path = 'users/' . $current_user->ID;
 $user_folders_data = getUserWasabiFiles($user_root_path); 
-wp_die(print_r($user_folders_data));
 // Get all folders for Quick Access
 $quick_access_folders = [
     ['folder' => 'Rockschool', 'path' => 'Rockschool'],
@@ -34,13 +29,11 @@ $quick_access_folders = [
 
 // Add user's subfolders to the quick access folders list
 foreach ($user_folders_data['folders'] as $user_folder) {
-    // Remove user root path from the folder path to get the subfolder name
-    $folder_name = trim(str_replace($user_root_path . '/', '', $user_folder), '/');
     
     // Add the folder name and path to the quick access array
     $quick_access_folders[] = [
-        'folder' => $folder_name,  // Display name of the folder
-        'path' => $user_folder     // Full path to the folder
+        'folder' => $user_folder['name'],  // Display name of the folder
+        'path' => $user_folder['path']    // Full path to the folder
     ];
 }
 
@@ -50,13 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
     $new_folder_name = sanitize_text_field($_POST['new_folder_name']);
     
     if (!empty($new_folder_name)) {
-        $new_folder_path = rtrim($directory, '/') . '/' . $new_folder_name;
+        $new_folder_path = rtrim($fullDirectory, '/') . '/' . $new_folder_name;
 
         // Create the folder in Wasabi
         createNewFolderInWasabi($new_folder_path);
 
         // Redirect to refresh folder view and prevent resubmission
-        wp_redirect(add_query_arg('folder', $directory));
+        wp_redirect(add_query_arg('folder', $fullDirectory));
         exit;
     }
 }
@@ -98,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
             <div class="col-lg-9">
                 <div class="dashboard-section">
                     <?php
-                        $display_name = ($displayDirectory === $user_root_path) ? 'My Folder' : htmlspecialchars($displayDirectory);
+                        $display_name = ($displayDirectory == $current_user->ID) ? 'My Folder' : htmlspecialchars($displayDirectory);
                     ?>
                     
                     <h3><?= $display_name ?></h3>
@@ -116,8 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                     <?php else: ?>
                         
                         <?php foreach ($rsl_folders_data['folders'] as $folder): 
-                            $basename = basename($folder);
-                            $folder_url = add_query_arg('folder', urlencode($folder));
+                            $basename = $folder['name'];
+                            $folder_url = '?folder=' . urlencode($folder['path']);
                         ?>
                         <div class="col-md-4 mb-4">
                             <a href="<?= esc_url($folder_url); ?>" class="text-decoration-none text-dark">
@@ -131,10 +124,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                         </div>
                         <?php endforeach; ?>
                         <?php foreach ($rsl_folders_data['files'] as $file): 
-                            $basename = basename($file);
+                            $basename = basename($file['name']);
                         ?>
                             <div class="col-md-4 mb-4">
-                                <a href="<?= esc_url($file); ?>" download class="text-decoration-none text-dark">
+                                <a href="<?= esc_url($file['path']); ?>" download class="text-decoration-none text-dark">
                                     <div class="text-center p-4">
                                         <div class="mb-3">
                                             <i class="fa <?= getFileIcon($basename); ?> fa-4x text-primary"></i>
@@ -192,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
         </div>
         <div class="modal-body">
           <input type="file" id="upload_files_input" multiple>
-          <input type="hidden" id="current_folder_path" value="<?php echo $directory?>">
+          <input type="hidden" id="current_folder_path" value="<?php echo $fullDirectory?>">
             <div id="upload_status_ajax"></div>
             
             <div class="upload-status-container">
