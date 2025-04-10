@@ -1246,3 +1246,7 @@ button:hover span span a {
 .forum-stats .nav-item .nav-link {
 	padding: 0 !important;
 }
+
+.nav-active .nav-link {
+	color: #00b5c3 !important;
+}

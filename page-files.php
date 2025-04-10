@@ -73,8 +73,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                     <h3><?php _e('Quick Access', 'rslfranchise'); ?></h3>
                     <ul class="nav flex-column list-group forum-stats">
                         <?php foreach ($quick_access_folders as $folder): ?>
-                            <li class="list-group-item nav-item">
-                                <a class="nav-link " href="?folder=<?= urlencode($folder['path']) ?>">
+
+                            <?php                                 
+                                // Check if the current folder matches the folder in the loop
+                                $is_active = ($rawDirectory == $folder['path']) ? 'nav-active' : '';
+                            ?>
+
+                            <li class="list-group-item nav-item <?= $is_active; ?>">
+                                <a class="nav-link" href="?folder=<?= urlencode($folder['path']) ?>">
                                     <i class="fa fa-folder"></i> <?= htmlspecialchars($folder['folder']) ?>
                                 </a>
                             </li>
