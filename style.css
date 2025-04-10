@@ -1242,3 +1242,7 @@ textarea {
 button:hover span span a {
 	color: white !important;
 }
+
+.forum-stats .nav-item .nav-link {
+	padding: 0 !important;
+}

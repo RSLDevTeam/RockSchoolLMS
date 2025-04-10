@@ -279,3 +279,8 @@ require get_template_directory() . '/apis/learndash-courses-access.php';
  * API to get user token functions.
  */
 require get_template_directory() . '/apis/get-cognito-token.php';
+
+/**
+ * Folder and Files Sturctures.
+ */
+require get_template_directory() . '/inc/files-folders-functions.php';
