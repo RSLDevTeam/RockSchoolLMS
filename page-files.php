@@ -277,7 +277,11 @@ jQuery(document).ready(function($) {
                             $("#overall_progress_container").show();
 
                             updateOverallProgress(index, 1);
-                             uploadNextFile(index + 1, folder);  // Upload next file
+                            uploadNextFile(index + 1, folder);  // Upload next file
+                            if (index + 1 === filesToUpload.length) {
+                                $("#upload_status").text("All files uploaded successfully!");
+                                location.reload();
+                            }
                         },
                         error: function() {
                             alert(`Failed to upload file: ${file.name}`);
