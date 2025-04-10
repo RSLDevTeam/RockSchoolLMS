@@ -10,8 +10,9 @@ function getUserWasabiFiles($folder = 'Rockschool') {
     $endpointPath = get_field('endpoint', 'option');
     $endpoint = 'https://' . $endpointPath;
 
-    // Construct prefix (path inside S3)
-    $prefix = trim('/' . ltrim($folder, '/'), '/') . '/';
+    // Decode the folder name and ensure it's properly formatted
+    $folder = urldecode($folder);  // Ensure it's URL-decoded
+    $prefix = rtrim(trim($folder, '/'), '/') . '/';  // Ensure trailing slash for folder
 
     // Create S3 client
     $s3 = new S3Client([
@@ -35,12 +36,14 @@ function getUserWasabiFiles($folder = 'Rockschool') {
         $folders = [];
         $files = [];
 
+        // Loop through subfolders (CommonPrefixes)
         if (isset($result['CommonPrefixes'])) {
             foreach ($result['CommonPrefixes'] as $f) {
                 $folders[] = basename($f['Prefix']);
             }
         }
 
+        // Loop through files (Contents)
         if (isset($result['Contents'])) {
             foreach ($result['Contents'] as $object) {
                 $fileName = basename($object['Key']);
@@ -78,6 +81,7 @@ function getUserWasabiFiles($folder = 'Rockschool') {
         ];
     }
 }
+
 
 
 // Function to get file icon class

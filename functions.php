@@ -285,3 +285,8 @@ require get_template_directory() . '/apis/get-cognito-token.php';
  * Folder and Files Sturctures.
  */
 require get_template_directory() . '/inc/files-folders-functions.php';
+
+/**
+ * Upload files functions.
+ */
+require get_template_directory() . '/inc/upload-files.php';
