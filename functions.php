@@ -214,6 +214,7 @@ require get_template_directory() . '/inc/block-registration.php';
  * Custom post types.
  */
 require get_template_directory() . '/inc/cpt-homework.php';
+require get_template_directory() . '/inc/cpt-franchise.php';
 
 /**
  * Homework functions.
@@ -258,7 +259,7 @@ require get_template_directory() . '/inc/search-webhook.php';
 /**
  * SSO Cognito functions.
  */
-require get_template_directory() . '/inc/sso-cognito.php';
+// require get_template_directory() . '/inc/sso-cognito.php';
 
 /**
  * Custom bbPress functions.

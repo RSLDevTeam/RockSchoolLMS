@@ -8,6 +8,9 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
+// Image sizes
+add_image_size( 'book-small', 555, 740, true );
+
 // Disable admin bar
 function disable_admin_bar_for_non_admins() {
     // Check if the current user is not an administrator
