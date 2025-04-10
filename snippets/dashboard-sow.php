@@ -70,7 +70,7 @@ $acf_user_id = 'user_' . $current_user->ID;
 	<div class="section-widget-metrics">
 	    <div class="section-widget-metric">
 	        <div class="metric-number"><?php echo $total_courses; ?></div>
-	        <div class="metric-title"><?php _e('Available schemes of work', 'rslfranchise'); ?></div>
+	        <div class="metric-title"><?php _e('Available schemes of lessons', 'rslfranchise'); ?></div>
 	    </div>
 	</div>
 
