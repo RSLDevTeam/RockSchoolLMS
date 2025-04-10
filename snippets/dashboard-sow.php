@@ -13,7 +13,7 @@ $acf_user_id = 'user_' . $current_user->ID;
 ?>
 
 <section class="dashboard-section">
-	<h3><?php _e('Schemes of Work', 'rslfranchise'); ?></h3>
+	<h3><?php _e('Schemes of Lessons', 'rslfranchise'); ?></h3>
 
 	<?php
 	$group_category = get_field('schemes_of_work_taxonomy', 'option');
