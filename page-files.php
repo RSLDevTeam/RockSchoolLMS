@@ -21,13 +21,58 @@ $rsl_folders_data = getUserWasabiFiles($fullDirectory);
 //Get User Root Directory
 $user_root_path = 'users/' . $current_user->ID;
 $user_folders_data = getUserWasabiFiles($user_root_path); 
+$user_rockschool_data = getUserWasabiFiles('Rockschool');
+$franchise_folders_data = [];
 $linked_franchises = get_field('linked_franchises', 'user_' . $current_user->ID) ?: [];
 
 //wp_die('Linked franchises: ' . print_r($linked_franchises, true));
 // Get all folders for Quick Access
 $quick_access_folders = [
-    ['folder' => 'Rockschool', 'path' => 'Rockschool'],
-    ['folder' => 'My Folder', 'path' => $user_root_path]
+    [
+        'folder' => 'Rockschool',
+        'path' => 'Rockschool', 
+        'is_parent' => true,
+    ]
+];
+// Add user's Rockschool folder to the quick access folders list
+foreach ($user_rockschool_data['folders'] as $rsl_folder) {
+    $quick_access_folders[] = [
+        'folder' => $rsl_folder['name'],  
+        'path' => $rsl_folder['path'],
+        'is_parent' => false,  
+    ];
+}
+
+
+// Add linked franchises to the quick access folders
+foreach ($linked_franchises as $franchise) {
+    $franchise_folder = 'franchises/' . $franchise->post_title;
+    $quick_access_folders[] = [
+        'folder' => $franchise->post_title,  // Display name of the franchise
+        'path' => $franchise_folder, 
+        'is_parent' => true  // Full path to the franchise folder
+    ];
+
+    //add sunfolders to the quick access folders
+    $franchise_folders_data[$franchise->post_title] = getUserWasabiFiles($franchise_folder);
+}
+
+//Add franchise folders to the quick access folders
+foreach ($franchise_folders_data as $franchise => $data) {
+    foreach ($data['folders'] as $folder) {
+        $quick_access_folders[] = [
+            'folder' => $folder['name'],  // Display name of the folder
+            'path' => $folder['path'],    // Full path to the folder
+            'is_parent' => false
+        ];
+    }
+}
+
+// Add user's root folder to the quick access folders list
+$quick_access_folders[] = [
+    'folder' => 'My Folder',  // Display name of the user's folder
+    'path' => $user_root_path, // Full path to the user's folder
+    'is_parent' => true
 ];
 
 // Add user's subfolders to the quick access folders list
@@ -39,15 +84,8 @@ foreach ($user_folders_data['folders'] as $user_folder) {
         'path' => $user_folder['path']    // Full path to the folder
     ];
 }
+//wp_die('Quick folders: ' . print_r($quick_access_folders, true));
 
-// Add linked franchises to the quick access folders
-foreach ($linked_franchises as $franchise) {
-    $franchise_folder = 'franchises/' . $franchise->post_title;
-    $quick_access_folders[] = [
-        'folder' => $franchise->post_title,  // Display name of the franchise
-        'path' => $franchise_folder  // Full path to the franchise folder
-    ];
-}
 
 // Handle "Create Folder" request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
@@ -83,26 +121,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                 <div class="dashboard-section">
                     <h3><?php _e('Quick Access', 'rslfranchise'); ?></h3>
                     <ul class="nav flex-column list-group forum-stats">
-                        <?php foreach ($quick_access_folders as $folder): ?>
+                        <?php
+                        $last_parent_path = '';
+                        $child_group = [];
+                        
+                        // First pass: group children under parents
+                        foreach ($quick_access_folders as $folder) {
+                            if (isset($folder['is_parent']) && $folder['is_parent']) {
+                                $last_parent_path = rtrim($folder['path'], '/') . '/';
+                            } else {
+                                $child_group[$last_parent_path][] = $folder;
+                            }
+                        }
 
-                            <?php                                 
-                                // Check if the current folder matches the folder in the loop
-                                $is_active = ($rawDirectory == $folder['path']) ? 'nav-active' : '';
-                                $is_franchise = (strpos($folder['path'], 'franchises/') !== false);
-                            ?>
+                        // Second pass: render items
+                        foreach ($quick_access_folders as $folder):
+                            $is_active = ($rawDirectory == $folder['path']) ? 'nav-active' : '';
+                            $is_franchise = (strpos($folder['path'], 'franchises/') !== false);
+                            $is_rockschool = (strpos($folder['path'], 'Rockschool') !== false);
+                            $is_parent = isset($folder['is_parent']) && $folder['is_parent'];
 
-                            <li class="list-group-item nav-item <?= $is_active; ?>">
-                                <a class="nav-link" href="?folder=<?= urlencode($folder['path']) ?>">
-                                    <?php if ($is_franchise): ?>
-                                        <i class="fa fa-building"></i>
-                                    <?php else: ?>
-                                        <i class="fa fa-folder"></i>
-                                    <?php endif; ?>
-                                    <?= htmlspecialchars($folder['folder']) ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
+                            if ($is_parent): 
+                                $has_children = !empty($child_group[rtrim($folder['path'], '/') . '/']);
+                        ?>
+                                <!-- Parent Folder -->
+                                <li class="list-group-item nav-item <?= $is_active ?> nav-parent <?= $has_children ? 'no-border' : '' ?>">
+                                    <a class="nav-link" href="?folder=<?= urlencode($folder['path']) ?>">
+                                        <?php if ($is_franchise): ?>
+                                            <i class="fa fa-building me-2"></i>
+                                        <?php elseif ($is_rockschool): ?>
+                                            <i class="fa fa-university me-2"></i>
+                                        <?php else: ?>
+                                            <i class="fa <?= $is_active ? 'fa-folder-open' : 'fa-folder' ?> me-2"></i>
+                                        <?php endif; ?>
+                                        <?= htmlspecialchars($folder['folder']) ?>
+                                    </a>
+                                </li>
+
+                                <?php if ($has_children):
+                                    $children = $child_group[rtrim($folder['path'], '/') . '/'];
+                                    $last_index = count($children) - 1;
+                                    foreach ($children as $index => $child):
+                                        $is_active = ($rawDirectory == $child['path']) ? 'nav-active' : '';
+                                        $is_last = $index === $last_index;
+                                ?>
+                                    <li class="list-group-item nav-item <?= $is_active ?> nav-child <?= $is_last ? 'last-child' : 'no-border' ?>">
+                                        <a class="nav-link ps-4" href="?folder=<?= urlencode($child['path']) ?>">
+                                            <i class="fa <?= $is_active ? 'fa-folder-open' : 'fa-folder' ?> me-2"></i>
+                                            <?= htmlspecialchars($child['folder']) ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; endif; ?>
+                        <?php endif; endforeach; ?>
                     </ul>
+
                 </div>  
             </div>
 
@@ -134,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                             <a href="<?= esc_url($folder_url); ?>" class="text-decoration-none text-dark">
                                 <div class="text-center p-4">
                                     <div class="mb-3">
-                                        <i class="fa fa-folder-open-o fa-4x text-primary"></i>
+                                        <i class="fa fa-folder-o fa-4x fa-rsl"></i>
                                     </div>
                                     <div class="file-name fw-semibold"><?= htmlspecialchars($basename); ?></div>
                                 </div>
@@ -148,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                                 <a href="<?= esc_url($file['path']); ?>" download class="text-decoration-none text-dark">
                                     <div class="text-center p-4">
                                         <div class="mb-3">
-                                            <i class="fa <?= getFileIcon($basename); ?> fa-4x text-primary"></i>
+                                            <i class="fa <?= getFileIcon($basename); ?> fa-4x fa-rsl"></i>
                                         </div>
                                         <div class="file-name fw-semibold"><?= htmlspecialchars($basename); ?></div>
                                     </div>

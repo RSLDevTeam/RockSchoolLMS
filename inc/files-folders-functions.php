@@ -87,18 +87,18 @@ function getUserWasabiFiles($folder = 'Rockschool') {
 function getFileIcon($file) {
   $ext = pathinfo($file, PATHINFO_EXTENSION);
   $icons = [
-      'pdf' => 'fa-file-pdf-o text-danger',
-      'txt' => 'fa-file-text-o text-primary',
-      'jpg' => 'fa-file-image-o text-success',
-      'jpeg'=> 'fa-file-image-o text-success',
-      'png' => 'fa-file-image-o text-success',
-      'doc' => 'fa-file-word-o text-info',
-      'docx' => 'fa-file-word-o text-info',
-      'xlsx' => 'fa-file-excel-o text-success',
-      'csv' => 'fa-file-excel-o text-success',
-      'zip' => 'fa-file-archive-0 text-warning'
+      'pdf' => 'fa-file-pdf-o',
+      'txt' => 'fa-file-text-o',
+      'jpg' => 'fa-file-image-o',
+      'jpeg'=> 'fa-file-image-o',
+      'png' => 'fa-file-image-o',
+      'doc' => 'fa-file-word-o',
+      'docx' => 'fa-file-word-o',
+      'xlsx' => 'fa-file-excel-o',
+      'csv' => 'fa-file-excel-o',
+      'zip' => 'fa-file-archive-o'
   ];
-  return $icons[$ext] ?? 'fa-file text-secondary';
+  return $icons[$ext] ?? 'fa-file';
 }
 
 

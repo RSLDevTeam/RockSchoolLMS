@@ -1250,3 +1250,34 @@ button:hover span span a {
 .nav-active .nav-link {
 	color: #00b5c3 !important;
 }
+
+.fa-rsl {
+	color: #323638;
+}
+
+.nav-depth,
+.nav-parent {
+	border-bottom: none !important;
+}
+
+.nav-child a {
+	margin-left: 20px;
+}
+
+.nav-parent.no-border,
+.nav-child.no-border {
+	border-bottom: none !important;
+}
+
+.nav-child.last-child {
+	border-bottom: 1px solid #ddd !important;
+}
+
+.nav-link {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.nav-link i {
+	margin-right: 5px;
+}
