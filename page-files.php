@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
     <div class="entry-content files-folder-container">
         <h1><?php _e('Files', 'rslfranchise'); ?></h1>
         <?php the_content(); ?>
-
+        
         <div class="row explorer">
             <div class="col-lg-3">
                 <div class="dashboard-section">
@@ -194,15 +194,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                     ?>
                     
                     <h3><?= $display_name ?></h3>
+                    <?php
+                        $topLevelFolder = getTopLevelFolder($fullDirectory);
+                    ?>
+
+                    <div class="folder-description mb-3 text-muted small">
+                        <?php if ($topLevelFolder === 'Rockschool'): ?>
+                            Access files, resources and assets from Rockschool.
+                        <?php elseif ($topLevelFolder === 'users'): ?>
+                            Your secure, personal file storage area. You can upload files and create folders.
+                        <?php else: ?>
+                            File storage area for <strong><?= htmlspecialchars($topLevelFolder) ?></strong>. Files added here are available to all members of <strong><?= htmlspecialchars($topLevelFolder) ?></strong>.
+                        <?php endif; ?>
+                    </div>
                     <? if ($displayDirectory !== 'Rockschool' ) :?>
                     <div class="d-flex justify-content-end">
-                        <div class="">
+                        <div class="btn-groups">
                             <button data-bs-toggle="modal" data-bs-target="#newFolderModal">New Folder</button>
                             <button data-bs-toggle="modal" data-bs-target="#uploadFilesModal">Upload Files</button>
                         </div>
                     </div>
                     <?php endif; ?>
-                    <div class="row file-grid">
+                    <div class="file-grid d-flex flex-wrap gap-3 justify-content-center ">
                     <?php if (!$rsl_folders_data['files'] && !$rsl_folders_data['folders']) : ?>
                         <div class="col-12">No files/folders in the selected folder.</div>
                     <?php else: ?>
@@ -211,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                             $basename = $folder['name'];
                             $folder_url = '?folder=' . urlencode($folder['path']);
                         ?>
-                        <div class="col-md-4 mb-4">
+                        <div class="file-item">
                             <a href="<?= esc_url($folder_url); ?>" class="text-decoration-none text-dark">
                                 <div class="text-center p-4">
                                     <div class="mb-3">
@@ -226,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                             $basename = basename($file['name']);
                             $file_path = $file['path']; 
                         ?>
-                            <div class="col-md-4 mb-4">
+                            <div class="file-item">
                                 <a href="?download=<?= urlencode($basename) ?>&path=<?= urlencode($file_path); ?>" download class="text-decoration-none">
                                     <div class="text-center p-4">
                                         <div class="mb-3">

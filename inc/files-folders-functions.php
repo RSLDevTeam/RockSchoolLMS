@@ -136,3 +136,12 @@ function createNewFolderInWasabi($folder_path) {
         error_log('Error creating folder in Wasabi: ' . $e->getMessage());
     }
 }
+
+
+function getTopLevelFolder($path) {
+    $segments = explode('/', trim($path, '/'));
+    if($segments[0] == 'franchises') {
+        array_shift($segments); 
+    }
+    return $segments[0] ?? '';
+}
