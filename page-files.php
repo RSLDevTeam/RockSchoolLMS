@@ -7,7 +7,8 @@ Template Post Type: page
 get_header();
 global $current_user;
 wp_get_current_user();
-
+$endpointPath = get_field('endpoint', 'option');  
+$endpoint = 'https://' . $endpointPath; 
 //Get Rockschool Directory or selected folder
 $rawDirectory = isset($_GET['folder']) ? urldecode($_GET['folder']) : 'Rockschool';
 
@@ -86,7 +87,15 @@ foreach ($user_folders_data['folders'] as $user_folder) {
 }
 //wp_die('Quick folders: ' . print_r($quick_access_folders, true));
 
-
+// Handle "Download" request
+if (isset($_GET['download'])) {
+    $file_name = urldecode($_GET['download']);
+    $file_path = urldecode($_GET['path']);
+    
+    // Download the file from Wasabi
+    downloadFileFromWasabi($file_name, $file_path);
+    exit;
+}
 // Handle "Create Folder" request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
     $new_folder_name = sanitize_text_field($_POST['new_folder_name']);
@@ -215,9 +224,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                         <?php endforeach; ?>
                         <?php foreach ($rsl_folders_data['files'] as $file): 
                             $basename = basename($file['name']);
+                            $file_path = $file['path']; 
                         ?>
                             <div class="col-md-4 mb-4">
-                                <a href="<?= esc_url($file['path']); ?>" download class="text-decoration-none text-dark">
+                                <a href="?download=<?= urlencode($basename) ?>&path=<?= urlencode($file_path); ?>" download class="text-decoration-none">
                                     <div class="text-center p-4">
                                         <div class="mb-3">
                                             <i class="fa <?= getFileIcon($basename); ?> fa-4x fa-rsl"></i>
