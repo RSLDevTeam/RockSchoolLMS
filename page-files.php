@@ -154,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                                 $has_children = !empty($child_group[rtrim($folder['path'], '/') . '/']);
                         ?>
                                 <!-- Parent Folder -->
-                                <li class="list-group-item nav-item <?= $is_active ?> nav-parent <?= $has_children ? 'no-border' : '' ?>">
+                                <li class="list-group-item nav-item <?= $is_active ?> nav-parent no-border ?>">
                                     <a class="nav-link" href="?folder=<?= urlencode($folder['path']) ?>">
                                         <?php if ($is_franchise): ?>
                                             <i class="fa fa-building me-2"></i>
@@ -174,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                                         $is_active = ($rawDirectory == $child['path']) ? 'nav-active' : '';
                                         $is_last = $index === $last_index;
                                 ?>
-                                    <li class="list-group-item nav-item <?= $is_active ?> nav-child <?= $is_last ? 'last-child' : 'no-border' ?>">
+                                    <li class="list-group-item nav-item <?= $is_active ?> nav-child no-border ?>">
                                         <a class="nav-link ps-4" href="?folder=<?= urlencode($child['path']) ?>">
                                             <i class="fa <?= $is_active ? 'fa-folder-open' : 'fa-folder' ?> me-2"></i>
                                             <?= htmlspecialchars($child['folder']) ?>
@@ -198,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                         $topLevelFolder = getTopLevelFolder($fullDirectory);
                     ?>
 
-                    <div class="folder-description mb-3 text-muted small">
+                    <div class="mb-3 text-muted">
                         <?php if ($topLevelFolder === 'Rockschool'): ?>
                             Access files, resources and assets from Rockschool.
                         <?php elseif ($topLevelFolder === 'users'): ?>
@@ -215,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                         </div>
                     </div>
                     <?php endif; ?>
-                    <div class="file-grid d-flex flex-wrap gap-3 justify-content-center ">
+                    <div class="file-grid d-flex flex-wrap gap-3">
                     <?php if (!$rsl_folders_data['files'] && !$rsl_folders_data['folders']) : ?>
                         <div class="col-12">No files/folders in the selected folder.</div>
                     <?php else: ?>
