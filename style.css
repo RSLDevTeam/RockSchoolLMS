@@ -1242,3 +1242,78 @@ textarea {
 button:hover span span a {
 	color: white !important;
 }
+
+.forum-stats .nav-item .nav-link {
+	padding: 0 !important;
+}
+
+.nav-active .nav-link {
+	color: #00b5c3 !important;
+}
+
+.fa-rsl {
+	color: #323638;
+}
+
+.nav-depth,
+.nav-parent {
+	border-bottom: none !important;
+}
+
+.nav-child a {
+	margin-left: 20px;
+}
+
+.nav-parent.no-border,
+.nav-child.no-border {
+	border-bottom: none !important;
+}
+
+.nav-child.last-child {
+	border-bottom: 1px solid #ddd !important;
+}
+
+.nav-link {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.nav-link i {
+	margin-right: 5px;
+}
+
+#uploadFilesForm {
+	max-width: 800px;
+	width: 600px;
+}
+
+
+
+.file-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.file-item {
+	width: 180px;
+	padding: 16px;
+	text-align: center;
+	border-radius: 8px;
+	background-color: #f8f9fa;
+	transition: box-shadow 0.2s ease-in-out;
+}
+
+.file-item:hover {
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.file-name {
+	font-weight: 600;
+	margin-top: 10px;
+	word-break: break-word;
+}
+
+.btn-groups {
+	margin-bottom: 20px;
+}

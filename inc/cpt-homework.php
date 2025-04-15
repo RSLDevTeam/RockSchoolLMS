@@ -37,6 +37,7 @@ function register_homework_post_type() {
         'has_archive'        => false,
         'hierarchical'       => false,
         'menu_position'      => 9,
+        'menu_icon'          => 'dashicons-megaphone',
         'supports'           => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
         'show_in_rest'       => true, 
     );
