@@ -18,6 +18,10 @@ if (!empty($_POST['add_learner_nonce']) && wp_verify_nonce($_POST['add_learner_n
     $learner_last_name = sanitize_text_field($_POST['learner_last_name']);
     $learner_password = $_POST['learner_password'];
 
+    // Create dummy email address for cognito 
+    $short_timestamp = substr(time(), -5); 
+    $email = $learner_username . '-' . $short_timestamp . '@rockschool.local';
+
     $error_messages = [];
 
     // Validation
@@ -25,15 +29,38 @@ if (!empty($_POST['add_learner_nonce']) && wp_verify_nonce($_POST['add_learner_n
         $error_messages[] = __('All fields are required.', 'rslfranchise');
     } elseif (username_exists($learner_username)) {
         $error_messages[] = __('This username is already taken.', 'rslfranchise');
-    } elseif (strlen($learner_password) < 6) {
-        $error_messages[] = __('Password must be at least 6 characters long.', 'rslfranchise');
+    } 
+
+    // Check for Cognito-style password complexity
+    if (!preg_match('/[A-Z]/', $learner_password)) {
+        $error_messages[] = __('Password must contain at least one uppercase letter.', 'rslfranchise');
+    }
+    if (!preg_match('/[a-z]/', $learner_password)) {
+        $error_messages[] = __('Password must contain at least one lowercase letter.', 'rslfranchise');
+    }
+    if (!preg_match('/[0-9]/', $learner_password)) {
+        $error_messages[] = __('Password must contain at least one number.', 'rslfranchise');
+    }
+    if (!preg_match('/[\W_]/', $learner_password)) {
+        $error_messages[] = __('Password must contain at least one special character.', 'rslfranchise');
     }
 
     // If no errors, create the user
     if (empty($error_messages)) {
-        $learner_id = wp_create_user($learner_username, $learner_password, '');
+
+        $learner_id = wp_create_user($learner_username, $learner_password, $email);
 
         if (!is_wp_error($learner_id)) {
+
+            // Assign the 'learner' role and set ACF field
+            (new WP_User($learner_id))->set_role('learner');
+            update_field('is_child', true, 'user_' . $learner_id);
+
+            // Sync user to Cognito with password from form
+            if (function_exists('sync_user_to_cognito')) {
+                sync_user_to_cognito($learner_id, $learner_password);
+            }
+
             // Update user meta
             wp_update_user([
                 'ID' => $learner_id,
@@ -41,10 +68,6 @@ if (!empty($_POST['add_learner_nonce']) && wp_verify_nonce($_POST['add_learner_n
                 'last_name' => $learner_last_name,
                 'display_name' => $learner_first_name . ' ' . $learner_last_name,
             ]);
-
-            // Assign the 'learner' role and set ACF field
-            (new WP_User($learner_id))->set_role('learner');
-            update_field('is_child', true, 'user_' . $learner_id);
 
             // Link learner to parent
             $linked_learners = get_field('linked_learners', 'user_' . $current_user->ID) ?: [];
@@ -54,6 +77,7 @@ if (!empty($_POST['add_learner_nonce']) && wp_verify_nonce($_POST['add_learner_n
             // Redirect to avoid form resubmission
             wp_safe_redirect(add_query_arg('learner_added', '1', get_permalink()));
             exit;
+            
         } else {
             $error_messages[] = $learner_id->get_error_message();
         }
@@ -119,8 +143,11 @@ $success_message = isset($_GET['learner_added']) ? __('Learner created and linke
 	        </div>
 
 	        <div class="form-group">
-	            <label for="learner_password"><?php _e('Password', 'rslfranchise'); ?></label>
-	            <input type="password" id="learner_password" name="learner_password" required>
+	            <label for="learner_password"><?php _e('Password (must be at least 8 characters, include uppercase, lowercase, a number, and a special character.)', 'rslfranchise'); ?></label>
+	            <input type="password" id="learner_password" name="learner_password"
+                       pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}"
+                       title="Password must be at least 8 characters, include uppercase, lowercase, a number, and a special character."
+                       required>
 	        </div>
 
 	        <button type="submit"><?php _e('Create Learner', 'rslfranchise'); ?></button>
@@ -128,3 +155,39 @@ $success_message = isset($_GET['learner_added']) ? __('Learner created and linke
 
 	</div>
 </div>
+
+<script>
+// JS password validation
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.add-learner-form');
+    const passwordInput = document.getElementById('learner_password');
+
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        const password = passwordInput.value;
+        const errors = [];
+
+        if (password.length < 8) {
+            errors.push("Password must be at least 8 characters.");
+        }
+        if (!/[A-Z]/.test(password)) {
+            errors.push("Password must include at least one uppercase letter.");
+        }
+        if (!/[a-z]/.test(password)) {
+            errors.push("Password must include at least one lowercase letter.");
+        }
+        if (!/[0-9]/.test(password)) {
+            errors.push("Password must include at least one number.");
+        }
+        if (!/[\W_]/.test(password)) {
+            errors.push("Password must include at least one special character.");
+        }
+
+        if (errors.length) {
+            e.preventDefault();
+            alert(errors.join("\n"));
+        }
+    });
+});
+</script>

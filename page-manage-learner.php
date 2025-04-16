@@ -58,9 +58,23 @@ if ($learner_user && !empty($_POST['manage_learner_nonce']) && wp_verify_nonce($
         $error_messages[] = __('Please enter a valid email address.', 'rslfranchise');
     }
 
-    if (!empty($password) && strlen($password) < 6) {
-        $error_messages[] = __('Password must be at least 6 characters.', 'rslfranchise');
-    }
+    if (!empty($password)) {
+        if (strlen($password) < 8) {
+            $error_messages[] = __('Password must be at least 8 characters.', 'rslfranchise');
+        }
+        if (!preg_match('/[A-Z]/', $password)) {
+            $error_messages[] = __('Password must contain at least one uppercase letter.', 'rslfranchise');
+        }
+        if (!preg_match('/[a-z]/', $password)) {
+            $error_messages[] = __('Password must contain at least one lowercase letter.', 'rslfranchise');
+        }
+        if (!preg_match('/[0-9]/', $password)) {
+            $error_messages[] = __('Password must contain at least one number.', 'rslfranchise');
+        }
+        if (!preg_match('/[\W_]/', $password)) {
+            $error_messages[] = __('Password must contain at least one special character.', 'rslfranchise');
+        }
+    } 
 
     if (empty($error_messages)) {
         $user_update_data = [
@@ -77,12 +91,18 @@ if ($learner_user && !empty($_POST['manage_learner_nonce']) && wp_verify_nonce($
         $update_result = wp_update_user($user_update_data);
 
         if (!is_wp_error($update_result)) {
+            
+            if (!empty($password) && function_exists('sync_user_to_cognito')) {
+                sync_user_to_cognito($learner_id, $password);
+            }
             if (!empty($password)) {
                 wp_set_password($password, $learner_id);
             }
 
             wp_safe_redirect(add_query_arg(['learner_id' => $learner_id, 'updated' => '1'], get_permalink()));
+
             exit;
+
         } else {
             $error_messages[] = $update_result->get_error_message();
         }
@@ -167,8 +187,11 @@ if (isset($_GET['updated']) && $_GET['updated'] === '1') {
                             </div>
 
                             <div class="form-group">
-                                <label for="learner_password"><?php _e('New Password (optional)', 'rslfranchise'); ?></label>
-                                <input type="password" id="learner_password" name="learner_password" placeholder="<?php _e('Leave blank to keep current password', 'rslfranchise'); ?>">
+                                <label for="learner_password"><?php _e('New Password (optional, must be at least 8 characters, include uppercase, lowercase, a number, and a special character.)', 'rslfranchise'); ?></label>
+                                <input type="password" id="learner_password" name="learner_password"
+                                       pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}"
+                                       title="Password must be at least 8 characters, include uppercase, lowercase, a number, and a special character."
+                                       placeholder="<?php _e('Leave blank to keep current password', 'rslfranchise'); ?>">
                             </div>
 
                             <button type="submit"><?php _e('Update Learner', 'rslfranchise'); ?></button>
@@ -237,5 +260,43 @@ if (isset($_GET['updated']) && $_GET['updated'] === '1') {
         </article><!-- #post-<?php the_ID(); ?> -->
     <?php endwhile; ?>
 </main><!-- #main -->
+
+<script>
+    // Form validation
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.manage-learner-form');
+    const passwordInput = document.getElementById('learner_password');
+
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        const password = passwordInput.value;
+        const errors = [];
+
+        if (password.length > 0) {
+            if (password.length < 8) {
+                errors.push("Password must be at least 8 characters.");
+            }
+            if (!/[A-Z]/.test(password)) {
+                errors.push("Password must include at least one uppercase letter.");
+            }
+            if (!/[a-z]/.test(password)) {
+                errors.push("Password must include at least one lowercase letter.");
+            }
+            if (!/[0-9]/.test(password)) {
+                errors.push("Password must include at least one number.");
+            }
+            if (!/[\W_]/.test(password)) {
+                errors.push("Password must include at least one special character.");
+            }
+        }
+
+        if (errors.length) {
+            e.preventDefault();
+            alert(errors.join("\n"));
+        }
+    });
+});
+</script>
 
 <?php get_sidebar(); get_footer(); ?>
