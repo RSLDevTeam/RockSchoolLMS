@@ -5,6 +5,52 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// Stop child users from accessing shop
+add_action('template_redirect', function () {
+    if (!is_user_logged_in()) {
+        return;
+    }
+
+    $user_id = get_current_user_id();
+    $is_child = get_field('is_child', 'user_' . $user_id);
+
+    if (!$is_child) {
+        return;
+    }
+
+    // Define WooCommerce pages to restrict
+    if (is_woocommerce() || is_cart() || is_checkout() || is_account_page()) {
+        wc_add_notice(__('Child user accounts cannot use the Shop. Please speak to your linked parent / guardian to purchase items.', 'your-text-domain'), 'error');
+    }
+});
+
+add_filter('woocommerce_is_purchasable', function ($purchasable, $product) {
+    if (!is_user_logged_in()) {
+        return $purchasable;
+    }
+
+    $user_id = get_current_user_id();
+    $is_child = get_field('is_child', 'user_' . $user_id);
+
+    if ($is_child) {
+        return false;
+    }
+
+    return $purchasable;
+}, 10, 2);
+
+add_filter('body_class', function ($classes) {
+    if (is_user_logged_in()) {
+        $user_id = get_current_user_id();
+        $is_child = get_field('is_child', 'user_' . $user_id);
+
+        if ($is_child) {
+            $classes[] = 'is-child-user';
+        }
+    }
+    return $classes;
+});
+
 // Woo styles
 function custom_enqueue_woocommerce_styles() {
     if (function_exists('is_woocommerce') && (is_woocommerce() || is_cart() || is_checkout() || is_account_page())) {
