@@ -2,20 +2,14 @@
 
 use Aws\S3\S3Client;
 
-function getUserWasabiFiles($folder = 'Rockschool') {
-    $bucket = get_field('bucket_name', 'option');
+function getWasabiClient() {
     $region = get_field('wasabi_region', 'option');
     $accessKey = get_field('wasabi_access_key', 'option');
     $secretKey = get_field('wasabi_secret_key', 'option');
     $endpointPath = get_field('endpoint', 'option');
     $endpoint = 'https://' . $endpointPath;
 
-    // Decode the folder name and ensure it's properly formatted
-    $folder = urldecode($folder);  // Ensure it's URL-decoded
-    $prefix = rtrim(trim($folder, '/'), '/') . '/';  // Ensure trailing slash for folder
-
-    // Create S3 client
-    $s3 = new S3Client([
+    return new S3Client([
         'version'     => 'latest',
         'region'      => $region,
         'endpoint'    => $endpoint,
@@ -25,6 +19,15 @@ function getUserWasabiFiles($folder = 'Rockschool') {
         ],
         'use_path_style_endpoint' => true
     ]);
+}
+
+
+function getUserWasabiFiles($folder = 'Rockschool') {
+    $bucket = get_field('bucket_name', 'option');
+    $folder = urldecode($folder);
+    $prefix = rtrim(trim($folder, '/'), '/') . '/';
+
+    $s3 = getWasabiClient();
 
     try {
         $result = $s3->listObjectsV2([
@@ -36,51 +39,70 @@ function getUserWasabiFiles($folder = 'Rockschool') {
         $folders = [];
         $files = [];
 
-        $folders = [];
-        $files = [];
-        
-        // Loop through subfolders (CommonPrefixes)
+        // Loop through subfolders
         if (isset($result['CommonPrefixes'])) {
             foreach ($result['CommonPrefixes'] as $f) {
-                $folderName = basename($f['Prefix']);
-                $fullFolderPath = $f['Prefix'];  // Full path of the folder
+                $folderPrefix = $f['Prefix'];
+                $folderName = basename($folderPrefix);
+
+                // Optional: get size and last modified time for folders
+                $folderMeta = $s3->listObjectsV2([
+                    'Bucket' => $bucket,
+                    'Prefix' => $folderPrefix,
+                ]);
+
+                $totalSize = 0;
+                $lastModified = null;
+
+                if (isset($folderMeta['Contents'])) {
+                    foreach ($folderMeta['Contents'] as $item) {
+                        $totalSize += $item['Size'];
+                        if (!$lastModified || strtotime($item['LastModified']) > strtotime($lastModified)) {
+                            $lastModified = $item['LastModified'];
+                        }
+                    }
+                }
+
                 $folders[] = [
                     'name' => $folderName,
-                    'path' => $fullFolderPath
+                    'path' => $folderPrefix,
+                    'size' => $totalSize,
+                    'last_modified' => $lastModified,
                 ];
             }
         }
-        
-        // Loop through files (Contents)
+
+        // Loop through files
         if (isset($result['Contents'])) {
             foreach ($result['Contents'] as $object) {
                 $fileName = basename($object['Key']);
-                $fullFilePath = $object['Key'];  // Full path of the file
+                $fullFilePath = $object['Key'];
+
                 if ($fileName && $object['Key'] !== $prefix) {
                     $files[] = [
                         'name' => $fileName,
-                        'path' => $fullFilePath
+                        'path' => $fullFilePath,
+                        'size' => $object['Size'],
+                        'last_modified' => $object['LastModified'],
                     ];
                 }
             }
         }
-        
 
         return [
-            'folders'    => $folders,
-            'files'      => $files,
+            'folders' => $folders,
+            'files'   => $files,
         ];
 
     } catch (Aws\Exception\AwsException $e) {
         error_log("Wasabi Error: " . $e->getMessage());
         return [
-            'folders'    => [],
-            'files'      => [],
-            'error'      => $e->getMessage()
+            'folders' => [],
+            'files'   => [],
+            'error'   => $e->getMessage(),
         ];
     }
 }
-
 
 
 // Function to get file icon class
@@ -104,23 +126,9 @@ function getFileIcon($file) {
 
 function createNewFolderInWasabi($folder_path) {
     $bucket = get_field('bucket_name', 'option');
-    $region = get_field('wasabi_region', 'option');
-    $accessKey = get_field('wasabi_access_key', 'option');
-    $secretKey = get_field('wasabi_secret_key', 'option');
-    $endpointPath = get_field('endpoint', 'option');
-    $endpoint = 'https://' . $endpointPath;
 
     try {
-        $s3Client = new S3Client([
-            'version'     => 'latest',
-            'region'      => $region,
-            'endpoint'    => $endpoint,
-            'credentials' => [
-                'key'    => $accessKey,
-                'secret' => $secretKey,
-            ],
-            'use_path_style_endpoint' => true,
-        ]);
+        $s3Client = getWasabiClient();
 
         // Ensure folder_path ends with `/`
         $folder_key = rtrim($folder_path, '/') . '/';

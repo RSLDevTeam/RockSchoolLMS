@@ -1317,3 +1317,9 @@ button:hover span span a {
 .btn-groups {
 	margin-bottom: 20px;
 }
+
+.btn-groups button.active {
+	border: 1px solid #4cadc2;
+	color: #fff;
+	background: #4cadc2;
+}

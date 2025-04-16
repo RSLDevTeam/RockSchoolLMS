@@ -9,6 +9,19 @@ global $current_user;
 wp_get_current_user();
 $endpointPath = get_field('endpoint', 'option');  
 $endpoint = 'https://' . $endpointPath; 
+
+session_start();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['set_view_mode'])) {
+    $view = $_POST['set_view_mode'];
+    if (in_array($view, ['large', 'list'])) {
+        $_SESSION['file_view_mode'] = $view;
+        exit; // End script if it's an AJAX call
+    }
+}
+
+// Fallback default view
+$currentView = $_SESSION['file_view_mode'] ?? 'large';
+
 //Get Rockschool Directory or selected folder
 $rawDirectory = isset($_GET['folder']) ? urldecode($_GET['folder']) : 'Rockschool';
 
@@ -207,49 +220,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                             File storage area for <strong><?= htmlspecialchars($topLevelFolder) ?></strong>. Files added here are available to all members of <strong><?= htmlspecialchars($topLevelFolder) ?></strong>.
                         <?php endif; ?>
                     </div>
-                    <? if ($displayDirectory !== 'Rockschool' ) :?>
-                    <div class="d-flex justify-content-end">
+                   
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="btn-groups">
-                            <button data-bs-toggle="modal" data-bs-target="#newFolderModal">New Folder</button>
-                            <button data-bs-toggle="modal" data-bs-target="#uploadFilesModal">Upload Files</button>
+                            <button id="btn-grid" data-view="large" class="<?= $currentView === 'large' ? 'active' : '' ?>">
+                                <i class="fa fa-th-large" aria-hidden="true"></i>
+                            </button>
+                            <button id="btn-list" data-view="list" class="<?= $currentView === 'list' ? 'active' : '' ?>">
+                                <i class="fa fa-th-list" aria-hidden="true"></i>
+                            </button>
                         </div>
-                    </div>
-                    <?php endif; ?>
-                    <div class="file-grid d-flex flex-wrap gap-3">
-                    <?php if (!$rsl_folders_data['files'] && !$rsl_folders_data['folders']) : ?>
-                        <div class="col-12">No files/folders in the selected folder.</div>
-                    <?php else: ?>
-                        
-                        <?php foreach ($rsl_folders_data['folders'] as $folder): 
-                            $basename = $folder['name'];
-                            $folder_url = '?folder=' . urlencode($folder['path']);
-                        ?>
-                        <div class="file-item">
-                            <a href="<?= esc_url($folder_url); ?>" class="text-decoration-none text-dark">
-                                <div class="text-center p-4">
-                                    <div class="mb-3">
-                                        <i class="fa fa-folder-o fa-4x fa-rsl"></i>
-                                    </div>
-                                    <div class="file-name fw-semibold"><?= htmlspecialchars($basename); ?></div>
-                                </div>
-                            </a>
-                        </div>
-                        <?php endforeach; ?>
-                        <?php foreach ($rsl_folders_data['files'] as $file): 
-                            $basename = basename($file['name']);
-                            $file_path = $file['path']; 
-                        ?>
-                            <div class="file-item">
-                                <a href="?download=<?= urlencode($basename) ?>&path=<?= urlencode($file_path); ?>" download class="text-decoration-none">
-                                    <div class="text-center p-4">
-                                        <div class="mb-3">
-                                            <i class="fa <?= getFileIcon($basename); ?> fa-4x fa-rsl"></i>
-                                        </div>
-                                        <div class="file-name fw-semibold"><?= htmlspecialchars($basename); ?></div>
-                                    </div>
-                                </a>
+
+                        <? if ($displayDirectory !== 'Rockschool' && $topLevelFolder !== 'Rockschool' ) :?>
+                            <div class="btn-groups">
+                                <button data-bs-toggle="modal" data-bs-target="#newFolderModal">New Folder</button>
+                                <button data-bs-toggle="modal" data-bs-target="#uploadFilesModal">Upload Files</button>
                             </div>
-                        <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class=" <?= $currentView === 'large' ? 'file-grid-view' : 'file-list-view' ?>" id=fileContainer>
+                    <?php if (!$rsl_folders_data['files'] && !$rsl_folders_data['folders']) : ?>
+                        <div class="col-12 text-center">No files/folders in the selected folder.</div>
+                    <?php else: ?>
+			            <?php
+                            // Display files in grid view
+                            set_query_var('rsl_folders_data', $rsl_folders_data);
+                            set_query_var('currentView', $currentView);
+                            get_template_part( 'template-parts/content', 'files-gridview' );
+
+                            // Display files in list view
+                            set_query_var('rsl_folders_data', $rsl_folders_data);
+                            set_query_var('currentView', $currentView);
+            			    get_template_part( 'template-parts/content', 'files-listview' );
+                        ?>
+                        
                     <?php endif; ?>
                 </div>
 
@@ -418,10 +422,33 @@ jQuery(document).ready(function($) {
             }
         });
     }
+
+    //function to toggle view
+    $('#btn-grid, #btn-list').on('click', function () {
+        let view = $(this).data('view');
+
+        // Remove previous classes and set new
+        $('#fileContainer')
+            .removeClass('file-grid-view file-list-view')
+            .addClass(view === 'large' ? 'file-grid-view' : 'file-list-view');
+
+        // Toggle active class on buttons
+        $('#btn-grid, #btn-list').removeClass('active');
+        $(this).addClass('active');
+        if (view === "large") {
+            $("#file-grid").show();
+            $("#file-table").hide();
+        } else {
+            $("#file-grid").hide();
+            $("#file-table").show();
+        }
+
+        // Save view mode in session via AJAX
+        $.post(window.location.href, { set_view_mode: view });
+    });
 });
 
 </script>
-
 
 <?php
 get_sidebar();

@@ -17,10 +17,10 @@ define('AWS_USER_POOL_ID', get_field('aws_user_pool_id', 'option')?: '');
 add_action('user_register', 'sync_user_to_cognito', 10, 1);
 add_action('profile_update', 'sync_user_to_cognito', 10, 2);
 
-function sync_user_to_cognito($user_id) {
+function sync_user_to_cognito($user_id, $raw_pass = null) {
     $user = get_userdata($user_id);
  
-    if (!$user || !$user->user_email) {
+    if (!$user) {
         return;
     }
     
@@ -41,13 +41,20 @@ function sync_user_to_cognito($user_id) {
     $username   = $user->user_login;
     $userPhone  = get_user_meta($user_id, 'billing_phone', true) ?? "";
     $userAddress = get_user_address($user_id);
+
+    $email = $user->user_email;
+    if (empty($email)) {
+        // Create dummy email address for cognito if not supplied
+        $short_timestamp = substr(time(), -5);
+        $email = $user->user_login . '-' . $short_timestamp . '@rockschool.local';
+    }
  
     $attributes = [
         ['Name' => 'name', 'Value' => $user->display_name],
-        ['Name' => 'email', 'Value' => $user->user_email],
+        ['Name' => 'email', 'Value' => $email],
         ['Name' => 'email_verified', 'Value' => 'true'],
         ['Name' => 'phone_number', 'Value' => $userPhone],
-        ['Name' => 'phone_number_verified', 'Value' => 'true'],
+        ['Name' => 'phone_number_verified', 'Value' => $userPhone ? 'true' : 'false'],
         ['Name' => 'address', 'Value' => $userAddress],
         ['Name' => 'custom:user_role', 'Value' => $user->roles[0] ?? 'subscriber'],
     ];
@@ -59,6 +66,17 @@ function sync_user_to_cognito($user_id) {
             'Username'       => $username,
             'UserAttributes' => $attributes,
         ]);
+
+        // Set password if the user already exists and raw password available
+        if ($raw_pass && is_string($raw_pass)) {
+            $cognitoClient->adminSetUserPassword([
+                'UserPoolId' => $user_pool_id,
+                'Username'   => $username,
+                'Password'   => $raw_pass,
+                'Permanent'  => true,
+            ]);
+        }
+
     } catch (AwsException $e) {
         if ($e->getAwsErrorCode() === 'UserNotFoundException') {
             try {
@@ -68,6 +86,17 @@ function sync_user_to_cognito($user_id) {
                     'UserAttributes' => $attributes,
                     //'MessageAction'  => 'SUPPRESS', //For Welocming user email
                 ]);
+
+                // Set password after creation if raw password is available
+                if ($raw_pass && is_string($raw_pass)) {
+                    $cognitoClient->adminSetUserPassword([
+                        'UserPoolId' => $user_pool_id,
+                        'Username'   => $username,
+                        'Password'   => $raw_pass,
+                        'Permanent'  => true,
+                    ]);
+                }
+
             } catch (AwsException $e) {
                 error_log('Cognito Create Error: ' . $e->getMessage());
                 wp_die('Error syncing user to Cognito' . $e->getMessage());
