@@ -11,7 +11,6 @@ function project_submission_ajax_s3_shortcode() {
     global $post;
     $homework_id = get_the_ID();
     $submitted_files = get_post_meta($homework_id, 'project_file_url');
-    $aws_options = get_option('aws_options');
     ?>
 
     <div id="project-upload-form-ajax">

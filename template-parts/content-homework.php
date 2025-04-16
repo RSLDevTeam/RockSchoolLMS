@@ -23,8 +23,8 @@ $instructor_avatar = get_avatar($instructor_id, 50);
 $instructor_name = $instructor['display_name'];
 $homework_id = get_the_ID();
 $submitted_files = get_post_meta($homework_id, 'project_file_url');
-$aws_options = get_option('aws_options');
-
+$bucketName = get_field('bucket_name', 'option');
+$endpoint = 'https://' . $endpointPath;
 $response = get_field('response');
 ?>
 
@@ -69,7 +69,7 @@ $response = get_field('response');
 					            <ul>
 					                <?php foreach ($submitted_files as $file_url): ?>
 					                    <?php
-					                    $file_key = str_replace('https://s3.eu-west-1.wasabisys.com/' . $aws_options['bucket_name'] . '/', '', $file_url);
+					                    $file_key = str_replace($endpoint . $bucketName . '/', '', $file_url);
 					                    $presigned_url = generate_presigned_view_url($file_key);
 					                    ?>
 					                    <li><a href="<?php echo esc_url($presigned_url); ?>" target="_blank"><?php echo basename($file_url); ?></a></li>
