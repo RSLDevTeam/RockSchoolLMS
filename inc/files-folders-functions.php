@@ -2,20 +2,14 @@
 
 use Aws\S3\S3Client;
 
-function getUserWasabiFiles($folder = 'Rockschool') {
-    $bucket = get_field('bucket_name', 'option');
+function getWasabiClient() {
     $region = get_field('wasabi_region', 'option');
     $accessKey = get_field('wasabi_access_key', 'option');
     $secretKey = get_field('wasabi_secret_key', 'option');
     $endpointPath = get_field('endpoint', 'option');
     $endpoint = 'https://' . $endpointPath;
 
-    // Decode the folder name and ensure it's properly formatted
-    $folder = urldecode($folder);  // Ensure it's URL-decoded
-    $prefix = rtrim(trim($folder, '/'), '/') . '/';  // Ensure trailing slash for folder
-
-    // Create S3 client
-    $s3 = new S3Client([
+    return new S3Client([
         'version'     => 'latest',
         'region'      => $region,
         'endpoint'    => $endpoint,
@@ -25,6 +19,15 @@ function getUserWasabiFiles($folder = 'Rockschool') {
         ],
         'use_path_style_endpoint' => true
     ]);
+}
+
+//Function to get user files and folders from Wasabi
+function getUserWasabiFiles($folder = 'Rockschool') {
+    $bucket = get_field('bucket_name', 'option');
+    $folder = urldecode($folder);
+    $prefix = rtrim(trim($folder, '/'), '/') . '/';
+
+    $s3 = getWasabiClient();
 
     try {
         $result = $s3->listObjectsV2([
@@ -36,51 +39,70 @@ function getUserWasabiFiles($folder = 'Rockschool') {
         $folders = [];
         $files = [];
 
-        $folders = [];
-        $files = [];
-        
-        // Loop through subfolders (CommonPrefixes)
+        // Loop through subfolders
         if (isset($result['CommonPrefixes'])) {
             foreach ($result['CommonPrefixes'] as $f) {
-                $folderName = basename($f['Prefix']);
-                $fullFolderPath = $f['Prefix'];  // Full path of the folder
+                $folderPrefix = $f['Prefix'];
+                $folderName = basename($folderPrefix);
+
+                // Optional: get size and last modified time for folders
+                $folderMeta = $s3->listObjectsV2([
+                    'Bucket' => $bucket,
+                    'Prefix' => $folderPrefix,
+                ]);
+
+                $totalSize = 0;
+                $lastModified = null;
+
+                if (isset($folderMeta['Contents'])) {
+                    foreach ($folderMeta['Contents'] as $item) {
+                        $totalSize += $item['Size'];
+                        if (!$lastModified || strtotime($item['LastModified']) > strtotime($lastModified)) {
+                            $lastModified = $item['LastModified'];
+                        }
+                    }
+                }
+
                 $folders[] = [
                     'name' => $folderName,
-                    'path' => $fullFolderPath
+                    'path' => $folderPrefix,
+                    'size' => $totalSize,
+                    'last_modified' => $lastModified,
                 ];
             }
         }
-        
-        // Loop through files (Contents)
+
+        // Loop through files
         if (isset($result['Contents'])) {
             foreach ($result['Contents'] as $object) {
                 $fileName = basename($object['Key']);
-                $fullFilePath = $object['Key'];  // Full path of the file
+                $fullFilePath = $object['Key'];
+
                 if ($fileName && $object['Key'] !== $prefix) {
                     $files[] = [
                         'name' => $fileName,
-                        'path' => $fullFilePath
+                        'path' => $fullFilePath,
+                        'size' => $object['Size'],
+                        'last_modified' => $object['LastModified'],
                     ];
                 }
             }
         }
-        
 
         return [
-            'folders'    => $folders,
-            'files'      => $files,
+            'folders' => $folders,
+            'files'   => $files,
         ];
 
     } catch (Aws\Exception\AwsException $e) {
         error_log("Wasabi Error: " . $e->getMessage());
         return [
-            'folders'    => [],
-            'files'      => [],
-            'error'      => $e->getMessage()
+            'folders' => [],
+            'files'   => [],
+            'error'   => $e->getMessage(),
         ];
     }
 }
-
 
 
 // Function to get file icon class
@@ -101,26 +123,13 @@ function getFileIcon($file) {
   return $icons[$ext] ?? 'fa-file';
 }
 
-
+// Function to create a new folder in Wasabi
+// This function creates a "folder" in Wasabi by uploading an empty object with a trailing slash
 function createNewFolderInWasabi($folder_path) {
     $bucket = get_field('bucket_name', 'option');
-    $region = get_field('wasabi_region', 'option');
-    $accessKey = get_field('wasabi_access_key', 'option');
-    $secretKey = get_field('wasabi_secret_key', 'option');
-    $endpointPath = get_field('endpoint', 'option');
-    $endpoint = 'https://' . $endpointPath;
 
     try {
-        $s3Client = new S3Client([
-            'version'     => 'latest',
-            'region'      => $region,
-            'endpoint'    => $endpoint,
-            'credentials' => [
-                'key'    => $accessKey,
-                'secret' => $secretKey,
-            ],
-            'use_path_style_endpoint' => true,
-        ]);
+        $s3Client = getWasabiClient();
 
         // Ensure folder_path ends with `/`
         $folder_key = rtrim($folder_path, '/') . '/';
@@ -137,11 +146,34 @@ function createNewFolderInWasabi($folder_path) {
     }
 }
 
-
+// Function to get the top-level folder name from a path
 function getTopLevelFolder($path) {
     $segments = explode('/', trim($path, '/'));
     if($segments[0] == 'franchises') {
         array_shift($segments); 
     }
     return $segments[0] ?? '';
+}
+
+
+//Function to delete folder/files in Wasabi
+function deleteFolderFilesInWasabi($type, $path) {
+    $bucket = get_field('bucket_name', 'option');
+    $s3Client = getWasabiClient();
+
+    try {
+        if ($type === 'folder') {
+            $s3Client->deleteMatchingObjects($bucket, $path);
+        } elseif ($type === 'file') {
+            $s3Client->deleteObject([
+                'Bucket' => $bucket,
+                'Key'    => $path,
+            ]);
+        }
+    } catch (Exception $e) {
+        error_log('Error deleting folder/files in Wasabi: ' . $e->getMessage());
+        return false;
+    }
+    return true;    
+    
 }

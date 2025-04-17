@@ -1317,3 +1317,23 @@ button:hover span span a {
 .btn-groups {
 	margin-bottom: 20px;
 }
+
+.btn-groups button.active {
+	border: 1px solid #4cadc2;
+	color: #fff;
+	background: #4cadc2;
+}
+
+.file-item .delete-btn {
+	display: none;
+	z-index: 10;
+}
+
+.file-item:hover .delete-btn {
+	display: inline-block;
+}
+
+table.file-table td,
+table.file-table th {
+	vertical-align: middle;
+}

@@ -287,6 +287,6 @@ require get_template_directory() . '/apis/get-cognito-token.php';
 require get_template_directory() . '/inc/files-folders-functions.php';
 
 /**
- * Upload files functions.
+ * Ajax files management functions.
  */
-require get_template_directory() . '/inc/upload-files.php';
+require get_template_directory() . '/inc/ajax-file-managment.php';
