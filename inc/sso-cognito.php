@@ -1,5 +1,13 @@
 <?php 
 
+// Disable WP user emails (we don't need these as they're sent directly from Cognito)
+
+add_action('init', function() {
+    remove_action('register_new_user', 'wp_send_new_user_notifications');
+    remove_action('edit_user_created_user', 'wp_send_new_user_notifications');
+    remove_action('user_register', 'wp_send_new_user_notifications');
+});
+
 // lets define constants for the cognito configuration from ACF values
 
 define('COGNITO_CLIENT_ID', get_field('client_id', 'option')?: '');
@@ -10,6 +18,15 @@ define('COGNITO_SCOPE', get_field('scope', 'option')?: '');
 
 
 ob_start();
+
+// Reset password link
+
+function get_cognito_forgot_password_url() {
+    $client_id = COGNITO_CLIENT_ID;
+    $redirect_uri = COGNITO_REDIRECT_URI; 
+    $cognito_domain = COGNITO_DOMAIN;
+    return "https://{$cognito_domain}/login?response_type=code&client_id={$client_id}&redirect_uri={$redirect_uri}&prompt=forgot_password";
+}
 
 // Redirect WordPress Login to Cognito Hosted UI
 
@@ -79,6 +96,9 @@ function handle_cognito_login_callback() {
                     case 'instructor':
                         $role = 'instructor';
                         break;
+                    case 'provisional_instructor':
+                        $role = 'provisional_instructor';
+                        break;
                     case 'parent':
                         $role = 'parent';
                         break;
@@ -104,7 +124,7 @@ function handle_cognito_login_callback() {
                         $role = 'subscriber';
                         break;
                     default:
-                        $role = 'learner';
+                        $role = 'subscriber'; // default user role (wp default)
                         break;
                 }
     

@@ -17,6 +17,9 @@ function custom_add_roles_once() {
     if (!get_role('instructor')) {
         add_role('instructor', 'Instructor', get_role('subscriber')->capabilities);
     }
+    if (!get_role('provisional_instructor')) {
+        add_role('provisional_instructor', 'Provisional Instructor', get_role('subscriber')->capabilities);
+    }
     if (!get_role('parent')) {
         add_role('parent', 'Parent', get_role('subscriber')->capabilities);
     }
@@ -32,6 +35,11 @@ function custom_add_roles_once() {
         $instructor->add_cap('is_instructor');
     }
 
+    $instructor = get_role('provisional_instructor');
+    if ($instructor && !$instructor->has_cap('is_provisional_instructor')) {
+        $instructor->add_cap('is_provisional_instructor');
+    }
+
     $parent = get_role('parent');
     if ($parent && !$parent->has_cap('is_parent')) {
         $parent->add_cap('is_parent');
@@ -41,7 +49,7 @@ add_action('init', 'custom_add_roles_once');
 
 // Hide admin bar for custom roles
 function hide_admin_bar_for_custom_roles() {
-    if (current_user_can('learner') || current_user_can('instructor') || current_user_can('parent')) {
+    if (current_user_can('learner') || current_user_can('instructor') || current_user_can('parent') || current_user_can('provisional_instructor')) {
         show_admin_bar(false);
     }
 }
@@ -50,7 +58,7 @@ add_action('after_setup_theme', 'hide_admin_bar_for_custom_roles');
 // Redirect Learner, Instructor, Parent, and Subscriber roles to the homepage after login
 function custom_login_redirect($redirect_to, $request, $user) {
     if (isset($user->roles) && is_array($user->roles)) {
-        if (in_array('learner', $user->roles) || in_array('instructor', $user->roles) || in_array('parent', $user->roles) || in_array('subscriber', $user->roles)) {
+        if (in_array('learner', $user->roles) || in_array('instructor', $user->roles) || in_array('parent', $user->roles) || in_array('subscriber', $user->roles) || in_array('provisional_instructor', $user->roles)) {
             return home_url(); // Redirect to homepage
         }
     }
