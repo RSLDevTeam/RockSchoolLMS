@@ -12,9 +12,11 @@
             <div class="file-name fw-semibold"><?= htmlspecialchars($basename); ?></div>
         </div>
     </a>
+    <?php if ($is_rockschool_directory) :?>
     <button class="btn btn-sm btn-danger delete-btn delete-folder-btn position-absolute top-0 end-0 m-2" title="Delete Folder" data-path="<?= $folder['path']; ?>">
         <i class="fa fa-trash"></i>
     </button>
+    <?php endif; ?>
   </div>
   <?php endforeach; ?>
   <?php foreach ($rsl_folders_data['files'] as $file): 
@@ -30,9 +32,11 @@
               <div class="file-name fw-semibold"><?= htmlspecialchars($basename); ?></div>
           </div>
       </a>
+      <?php if ($is_rockschool_directory) :?>
       <button class="btn btn-sm btn-danger delete-btn delete-file-btn position-absolute top-0 end-0 m-2" title="Delete File" data-path="<?= $file_path ?>">
           <i class="fa fa-trash"></i>
       </button>
+      <?php endif; ?>
     </div>
 
   <?php endforeach; ?>

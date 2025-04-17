@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
     <div class="entry-content files-folder-container">
-        <h1><?php _e('Files', 'rslfranchise'); ?></h1>
+        <h1><?php _e('File Manager', 'rslfranchise'); ?></h1>
         <?php the_content(); ?>
         
         <div class="row explorer">
@@ -230,10 +230,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                         </div>
 
                         <? if ($displayDirectory !== 'Rockschool' && $topLevelFolder !== 'Rockschool' ) :?>
+                            <?php $is_rockschool_directory = true;?>
                             <div class="btn-groups">
                                 <button data-bs-toggle="modal" data-bs-target="#newFolderModal">New Folder</button>
                                 <button data-bs-toggle="modal" data-bs-target="#uploadFilesModal">Upload Files</button>
                             </div>
+                        <?php else: 
+                            $is_rockschool_directory = false;
+                        ?>
                         <?php endif; ?>
                     </div>
                     <div class=" <?= $currentView === 'large' ? 'file-grid-view' : 'file-list-view' ?>" id=fileContainer>
@@ -242,13 +246,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                     <?php else: ?>
 			            <?php
                             // Display files in grid view
+                            
                             set_query_var('rsl_folders_data', $rsl_folders_data);
                             set_query_var('currentView', $currentView);
+                            set_query_var('is_rockschool_directory', $is_rockschool_directory);
                             get_template_part( 'template-parts/content', 'files-gridview' );
 
                             // Display files in list view
                             set_query_var('rsl_folders_data', $rsl_folders_data);
                             set_query_var('currentView', $currentView);
+                            set_query_var('is_rockschool_directory', $is_rockschool_directory);
             			    get_template_part( 'template-parts/content', 'files-listview' );
                         ?>
                         

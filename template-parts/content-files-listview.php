@@ -6,7 +6,9 @@
                 <th>Type</th>
                 <th>Size</th>
                 <th>Last Modified</th>
-                <th>Action</th>
+                <?php if ($is_rockschool_directory) :?>
+                    <th>Action</th>
+                <?php endif; ?>
             </tr>
         </thead>
         <tbody>
@@ -21,11 +23,13 @@
                     <td>Folder</td>
                     <td><?= $folder['size'] > 0 ? size_format($folder['size']) : '—'; ?></td>
                     <td><?= $folder['last_modified'] ? date("Y-m-d H:i", strtotime($folder['last_modified'])) : '—'; ?></td>
+                    <?php if ($is_rockschool_directory) :?>
                     <td>
                         <button class="btn btn-danger delete-folder-btn" data-path="<?= $folder['path']; ?>">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
+                    <?php endif; ?>
                 </tr>
             <?php endforeach; ?>
 
@@ -40,11 +44,13 @@
                     <td><?= strtoupper(pathinfo($file['name'], PATHINFO_EXTENSION)) ?: 'File'; ?></td>
                     <td><?= size_format($file['size']); ?></td>
                     <td><?= date("Y-m-d H:i", strtotime($file['last_modified'])); ?></td>
-                    <td>
-                        <button class="btn btn-danger delete-file-btn" data-path="<?= $file['path']; ?>">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </td>
+                    <?php if ($is_rockschool_directory) :?>
+                        <td>
+                            <button class="btn btn-danger delete-file-btn" data-path="<?= $file['path']; ?>">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    <?php endif; ?>
                 </tr>
             <?php endforeach; ?>
         </tbody>
