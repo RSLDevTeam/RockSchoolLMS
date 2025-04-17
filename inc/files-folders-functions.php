@@ -21,7 +21,7 @@ function getWasabiClient() {
     ]);
 }
 
-
+//Function to get user files and folders from Wasabi
 function getUserWasabiFiles($folder = 'Rockschool') {
     $bucket = get_field('bucket_name', 'option');
     $folder = urldecode($folder);
@@ -123,7 +123,8 @@ function getFileIcon($file) {
   return $icons[$ext] ?? 'fa-file';
 }
 
-
+// Function to create a new folder in Wasabi
+// This function creates a "folder" in Wasabi by uploading an empty object with a trailing slash
 function createNewFolderInWasabi($folder_path) {
     $bucket = get_field('bucket_name', 'option');
 
@@ -145,11 +146,34 @@ function createNewFolderInWasabi($folder_path) {
     }
 }
 
-
+// Function to get the top-level folder name from a path
 function getTopLevelFolder($path) {
     $segments = explode('/', trim($path, '/'));
     if($segments[0] == 'franchises') {
         array_shift($segments); 
     }
     return $segments[0] ?? '';
+}
+
+
+//Function to delete folder/files in Wasabi
+function deleteFolderFilesInWasabi($type, $path) {
+    $bucket = get_field('bucket_name', 'option');
+    $s3Client = getWasabiClient();
+
+    try {
+        if ($type === 'folder') {
+            $s3Client->deleteMatchingObjects($bucket, $path);
+        } elseif ($type === 'file') {
+            $s3Client->deleteObject([
+                'Bucket' => $bucket,
+                'Key'    => $path,
+            ]);
+        }
+    } catch (Exception $e) {
+        error_log('Error deleting folder/files in Wasabi: ' . $e->getMessage());
+        return false;
+    }
+    return true;    
+    
 }

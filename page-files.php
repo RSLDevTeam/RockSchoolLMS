@@ -98,7 +98,6 @@ foreach ($user_folders_data['folders'] as $user_folder) {
         'path' => $user_folder['path']    // Full path to the folder
     ];
 }
-//wp_die('Quick folders: ' . print_r($quick_access_folders, true));
 
 // Handle "Download" request
 if (isset($_GET['download'])) {
@@ -124,7 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
         exit;
     }
 }
-
 
 ?>
 
@@ -167,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                                 $has_children = !empty($child_group[rtrim($folder['path'], '/') . '/']);
                         ?>
                                 <!-- Parent Folder -->
-                                <li class="list-group-item nav-item <?= $is_active ?> nav-parent no-border ?>">
+                                <li class="list-group-item nav-item <?= $is_active ?> nav-parent no-border" data-path="<?= esc_attr($folder['path']) ?>">
                                     <a class="nav-link" href="?folder=<?= urlencode($folder['path']) ?>">
                                         <?php if ($is_franchise): ?>
                                             <i class="fa fa-building me-2"></i>
@@ -187,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
                                         $is_active = ($rawDirectory == $child['path']) ? 'nav-active' : '';
                                         $is_last = $index === $last_index;
                                 ?>
-                                    <li class="list-group-item nav-item <?= $is_active ?> nav-child no-border ?>">
+                                    <li class="list-group-item nav-item <?= $is_active ?> nav-child no-border" data-path="<?= esc_attr($child['path']) ?>">
                                         <a class="nav-link ps-4" href="?folder=<?= urlencode($child['path']) ?>">
                                             <i class="fa <?= $is_active ? 'fa-folder-open' : 'fa-folder' ?> me-2"></i>
                                             <?= htmlspecialchars($child['folder']) ?>
@@ -322,6 +320,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_folder'])) {
   </div>
 </div>
 
+<!-- File Delete Confirmation -->
+<div class="modal fade" id="deleteFileModal" tabindex="-1" aria-labelledby="deleteFileLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Confirm File Deletion</h5></div>
+      <div class="modal-body">Are you sure you want to delete this file?</div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="confirmDeleteFileBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Folder Delete Confirmation -->
+<div class="modal fade" id="deleteFolderModal" tabindex="-1" aria-labelledby="deleteFolderLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Confirm Folder Deletion</h5></div>
+      <div class="modal-body"> Are you sure you want to delete whole folder?</div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="confirmDeleteFolderBtn">Delete All</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 </main>
 
@@ -334,7 +361,13 @@ jQuery(document).ready(function($) {
     $("#upload_files_btn").click(function() {
         const files = $("#upload_files_input")[0].files;
         const folder = $("#current_folder_path").val() || "Rockschool";
+        const $btn = $(this);
 
+        // Show spinner
+        $btn.prop('disabled', true).html(`
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Uploading...
+        `);
         if (files.length === 0) {
             alert("Please select at least one file.");
             return;
@@ -445,6 +478,75 @@ jQuery(document).ready(function($) {
 
         // Save view mode in session via AJAX
         $.post(window.location.href, { set_view_mode: view });
+    });
+
+    //function to delete file/folder
+    let selectedPath = '';
+    let selectedType = '';
+    let originalBtnHTML = '';
+
+
+    $('.delete-file-btn').on('click', function () {
+        selectedPath = $(this).data('path');
+        selectedType = 'file';
+        originalBtnHTML = $('#confirmDeleteFileBtn').html();
+        $('#deleteFileModal').modal('show');
+    });
+
+    $('.delete-folder-btn').on('click', function () {
+        selectedPath = $(this).data('path');
+        selectedType = 'folder';
+        originalBtnHTML = $('#confirmDeleteFileBtn').html();
+        $('#deleteFolderModal').modal('show');
+    });
+
+    $('#confirmDeleteFileBtn, #confirmDeleteFolderBtn').on('click', function () {
+        const $btn = $(this);
+
+        // Show spinner
+        $btn.prop('disabled', true).html(`
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Deleting...
+        `);
+
+        $.ajax({
+            url: ajaxurl,
+            method: 'POST',
+            data: {
+                action: 'delete_file_folder',
+                path: selectedPath,
+                type: selectedType
+            },
+            success: function (res) {
+                try {
+                    console.log(res);
+                    if (res.success) {
+                        
+                        $(`[data-path="${selectedPath}"]`).closest('.file-item, tr, li').fadeOut();
+                        //close the modal based on type
+                        if (selectedType === 'file') {
+                            $('#deleteFileModal').modal('hide');
+                        } else {
+                            $('#deleteFolderModal').modal('hide');
+                        }
+                        // // Reload after a brief delay if needed
+                        // setTimeout(() => {
+                        //     window.location.href = window.location.href;
+                        // }, 500);
+                    } else {
+                        alert('Error: ' + res.error);
+                        $btn.prop('disabled', false).html(originalBtnHTML);
+                    }
+                } catch (err) {
+                    alert('Unexpected response from server.');
+                    $btn.prop('disabled', false).html(originalBtnHTML);
+                }
+            },
+            error: function () {
+                alert('Server error. Please try again.');
+                $btn.prop('disabled', false).html(originalBtnHTML);
+            }
+        });
     });
 });
 

@@ -49,7 +49,7 @@ function generate_presigned_url_callback() {
     wp_die();
 }
 
-
+//Function to downlad the file from Wasabi
 function downloadFileFromWasabi($file_name, $file_path) {
     $bucketName = get_field('bucket_name', 'option');
     $region = get_field('wasabi_region', 'option');
@@ -99,4 +99,27 @@ function downloadFileFromWasabi($file_name, $file_path) {
         echo "Error downloading file: " . $e->getMessage();
     }
 }
+
+//Ajax Function to delete the file/folder
+add_action('wp_ajax_delete_file_folder', 'delete_file_folder');
+add_action('wp_ajax_nopriv_delete_file_folder', 'delete_file_folder');
+function delete_file_folder() {
+    if (!isset($_POST['type']) || !isset($_POST['path'])) {
+        wp_send_json_error('Missing file name or folder');
+        wp_die();
+    }
+    $type = sanitize_text_field($_POST['type']);
+    $path = sanitize_text_field($_POST['path']);    
+    if (!empty($type) && !empty($path)) {
+        
+        $response = deleteFolderFilesInWasabi($type, $path);
+
+        if ($response) {
+            wp_send_json_success('File/Folder deleted successfully');
+        } else {
+            wp_send_json_error('Failed to delete file/folder');
+        }
+    }
+}
+
 
